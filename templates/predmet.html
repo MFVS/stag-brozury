@@ -1,0 +1,10 @@
+{% extends 'base.html' %}{% block head %} {% endblock head %} {% block body %}
+
+<div class="container d-flex justify-content-center mx-auto p-3">
+  <h1>{{data['nazev'][0]}}</h1>
+</div>
+<div class="container w-50">
+  <p>{{ data['anotace'][0] }}</p>
+</div>
+
+{% endblock body %}

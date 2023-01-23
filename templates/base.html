@@ -10,6 +10,26 @@
       integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
       crossorigin="anonymous"
     />
+    <nav class="navbar navbar-expand-lg">
+      <a class="navbar-brand px-3" href="/">
+        <img src="/static/ujep_logo.png" height="50" />
+      </a>
+      <div class="dropdown px-3">
+        <button
+          class="btn btn-outline-dark dropdown-toggle"
+          type="button"
+          id="dropdownMenuButton1"
+          data-bs-toggle="dropdown"
+        >
+          KI
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <li>
+            <a class="dropdown-item" href="/EAPR1">EAPR1</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
     {% block head %}{% endblock %}
   </head>
   <body>
