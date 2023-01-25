@@ -1,3 +1,20 @@
 {% extends 'base.html' %}{% block head %}{% endblock %}{% block body %}
+<style>
+    .zoom {
+      transition: transform .2s;
+    }
+    
+    .zoom:hover {
+      transform: scale(1.25);
+    }
+    </style>
+<div class='container d-flex justify-content-center'>
 <h1>Stag Erasmus</h1>
+</div>
+{% for i in katedry %}
+<a href='/{{i}}'>{{i}}</a>
+{% endfor %}
+<a href='/KMA'>
+<img src="static/KMA.jpg" class="zoom" width='300'>
+</a>
 {% endblock %}
