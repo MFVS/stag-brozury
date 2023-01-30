@@ -2,6 +2,8 @@ from flask import Flask, render_template, send_from_directory
 from stag_data import *
 
 app = Flask(__name__)
+
+# Endpointy
     
 @app.route('/')
 def home():
@@ -14,7 +16,7 @@ def overview(katedra):
 
 @app.route('/favicon.ico')
 def icon():
-    return send_from_directory('static','ujep_erasmus.png')
+    return send_from_directory('static','stag_favcon.ico')
 
 
 if __name__ == "__main__":

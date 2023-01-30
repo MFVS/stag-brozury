@@ -1,73 +1,75 @@
-{% extends 'base.html' %}
-{% block dropdown %}
+{% extends 'base.html' %} {% block dropdown %}
 <button
-          class="btn btn-outline-success dropdown-toggle"
-          type="button"
-          id="dropdownMenuButton1"
-          data-bs-toggle="dropdown"
-        >
-          {{katedra}}
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-{% for i in range(data|length) %}
-<li>
-  <a class="dropdown-item" href="#{{data[i]['nazev'][0]}}">{{ data[i]['nazev'][0] }}</a>
-</li>
-{% endfor %}
+  class="btn btn-outline-success dropdown-toggle"
+  type="button"
+  id="dropdownMenuButton1"
+  data-bs-toggle="dropdown"
+>
+  {{katedra}}
+</button>
+<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+  {% for i in range(data|length) %}
+  <li>
+    <a class="dropdown-item" href="#{{data[i]['nazev'][0]}}"
+      >{{ data[i]['nazev'][0] }}</a
+    >
+  </li>
+  {% endfor %}
 </ul>
-{% endblock dropdown %}
-{% block head %} {% endblock head %} {% block body %}
-
-{% for i in range(data|length) %}
+{% endblock dropdown %} {% block head %} {% endblock head %} {% block body %} {%
+for i in range(data|length) %}
 <div class="container d-flex justify-content-center p-4 pt-5">
   <h1 id="{{data[i]['nazev'][0]}}">{{data[i]['nazev'][0]}}</h1>
 </div>
 <div class="container w-50">
-  <table class='table'>
+  <table class="table">
     <tbody>
       <tr>
-      <th>Course code</th>
-      <td>{{ data[i]['katedra'][0] }}/{{ data[i]['zkratka'][0] }}</td>
+        <th>Course code</th>
+        <td>{{ data[i]['katedra'][0] }}/{{ data[i]['zkratka'][0] }}</td>
       </tr>
       <tr>
         <th>ECTS</th>
-      <td>{{ data[i]['kreditu'][0] }}</td>
+        <td>{{ data[i]['kreditu'][0] }}</td>
       </tr>
       <tr>
         <th>Teacher</th>
-        <td>{{ data[i]['prednasejici'][0].translate({39:None}) }}</td>
+        <td>
+          {{ (data[i]['prednasejici'][0] | string).translate({39:None}) }}
+        </td>
       </tr>
       <tr>
         <th>Term</th>
-        <td>{% if data[i]['vyukaZS'][0] == 'A' %}
-          Winter
-          {% else %}
-          Summer
-          {% endif %}
+        <td>
+          {% if data[i]['vyukaZS'][0] == 'A' %} Winter {% else %} Summer {%
+          endif %}
         </td>
       </tr>
       <tr>
         <th>Language of instruction</th>
-        <td>{{ data[i]['vyucovaciJazyky'][0] }}
+        <td>{{ data[i]['vyucovaciJazyky'][0] }}</td>
       </tr>
 
       <tr>
         <th>Lecture/exercises</th>
-        <td>{{ data[i]['jednotekPrednasek'][0]}}/{{ data[i]['jednotekCviceni'][0] }} per week</td>
+        <td>
+          {{ data[i]['jednotekPrednasek'][0]}}/{{ data[i]['jednotekCviceni'][0]
+          }} per week
+        </td>
       </tr>
       <tr>
         <th>Completion</th>
         <td>{{ data[i]['typZkousky'][0] }}</td>
       </tr>
       <tr>
-        <td colspan='2'>{{ data[i]['anotace'][0] }}</td>
+        <td colspan="2">{{ data[i]['anotace'][0] }}</td>
       </tr>
       <tr>
-        <td colspan='2'>{{ data[i]['prehledLatky'][0] | replace("\n", "<br>" | safe ) }}</td>
+        <td colspan="2">
+          {{ data[i]['prehledLatky'][0] | replace("\n", "<br />" | safe ) }}
+        </td>
       </tr>
     </tbody>
-</table>
+  </table>
 </div>
-{% endfor %}
-
-{% endblock body %}
+{% endfor %} {% endblock body %}
