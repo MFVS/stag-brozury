@@ -14,6 +14,7 @@ def overview(katedra):
     data = get_data(katedra)
     return render_template('predmet.html', data=data, katedra=katedra)
 
+
 @app.route('/favicon.ico')
 def icon():
     return send_from_directory('static','stag_favcon.ico')

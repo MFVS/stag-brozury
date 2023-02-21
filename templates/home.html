@@ -1,21 +1,26 @@
-<!-- 'Homepage', TODO: dodělat odkazy na všchny katedry -->
-
 {% extends 'base.html' %}{% block head %}{% endblock %}{% block body %}
 <style>
   .zoom {
     transition: transform 0.2s;
     object-fit: cover;
+    text-decoration: none;
   }
 
   .zoom:hover {
     transform: scale(1.25);
   }
 </style>
-<div class="container d-flex justify-content-center">
-  <h1>Stag Erasmus</h1>
-</div>
+
+<h1 style="text-align: center">Stag Erasmus</h1>
+
 {% for i in katedry %}
-<a href="/{{i}}">
-  <img src="static/{{i}}.jpg" class="zoom p-3" width="400" height="300" />
-</a>
+<div class="container d-flex justify-content-center">
+  <div class="row">
+    <div class="col-sm">
+      <a href="/{{i}}">
+        <img src="static/{{i}}.jpg" class="zoom p-3" width="400" height="300" />
+      </a>
+    </div>
+  </div>
+</div>
 {% endfor %} {% endblock %}

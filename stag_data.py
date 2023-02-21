@@ -1,7 +1,6 @@
 import pandas as pd
 
-# Seznam přemětů pro každou katedru. (předměty pro erasmáky)
-# TODO: Tahat ze stagu přeměty podle oborů.
+# TODO: Přeměty podle oborů.
 
 katedry = {
     'KI' : ['EAPR1','EAPR2','ECIS','EDAV', 'ECGR', 'NSQL','RDBS', 'EIS'],
@@ -12,7 +11,6 @@ katedry = {
     'KFY': ['E511']
 }
 
-# Vrací seznam informací pro každý předmět dané katedry.
 
 def get_data(katedra):
     zkratky = katedry.get(katedra)

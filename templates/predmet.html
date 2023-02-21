@@ -1,6 +1,8 @@
+<!-- TODO: vyučování, správné jednotky (semináře, cvičení, přednášky) -->
+
 {% extends 'base.html' %} {% block dropdown %}
 <button
-  class="btn btn-outline-success dropdown-toggle"
+  class="btn btn-outline-dark dropdown-toggle"
   type="button"
   id="dropdownMenuButton1"
   data-bs-toggle="dropdown"
@@ -16,6 +18,10 @@
   </li>
   {% endfor %}
 </ul>
+
+<a href="/" class="px-3">
+  <img src="static/home-3-svgrepo-com.svg" width="30" />
+</a>
 {% endblock dropdown %} {% block head %} {% endblock head %} {% block body %} {%
 for i in range(data|length) %}
 <div class="container d-flex justify-content-center p-4 pt-5">
