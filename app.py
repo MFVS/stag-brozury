@@ -3,7 +3,6 @@ from stag_data import *
 
 app = Flask(__name__)
 
-# Endpointy
 
 
 @app.route("/")

@@ -1,1 +1,3 @@
-# staghelper
+# Staghelper
+
+`flask --app app run`
