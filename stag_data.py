@@ -5,8 +5,8 @@ import pandas as pd
 katedry = {
     "KI": ["EAPR1", "EAPR2", "ECIS", "EDAV", "ECGR", "NSQL", "RDBS", "EIS"],
     "KMA": ["E101", "E103", "E104", "E105"],
-    "KGEO": [],
-    "KBI": [],
+    "KGEO": ["E101", "E100"],
+    "KBI": ["E107", "E106", "E105"],
     "KCH": [],
     "KFY": ["E511"],
 }
