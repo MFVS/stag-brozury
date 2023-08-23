@@ -1,6 +1,12 @@
 <!-- TODO: vyučování, správné jednotky (semináře, cvičení, přednášky) -->
 
-{% extends 'base.html' %} {% block dropdown %}
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock head %}
+
+{% block dropdown %}
 <button
   class="btn btn-outline-dark dropdown-toggle"
   type="button"
@@ -22,13 +28,13 @@
 <a href="/" class="px-3">
   <img src="static/home-3-svgrepo-com.svg" width="30" />
 </a>
-{% endblock dropdown %} {% block head %} {% endblock head %} {% block body %} {%
+{% endblock dropdown %} {% block body %} {%
 for i in range(data|length) %}
 <!-- TODO: nadpis soucast containeru -->
-<div class="container d-flex justify-content-center p-4 pt-5">
+<div class="container d-flex justify-content-center w-50 p-4 pt-5 mt-5 rounded bg-white">
   <h1 id="{{data[i]['nazev'][0]}}">{{data[i]['nazev'][0]}}</h1>
 </div>
-<div class="container w-50 rounded bg-light">
+<div class="container w-50 rounded bg-white">
   <table class="table">
     <tbody>
       <tr>

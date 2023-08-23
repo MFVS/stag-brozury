@@ -26,7 +26,12 @@ async def overview(request: Request, katedra: str):
         "predmet.html", {"request": request, "data": data, "katedra": katedra}
     )
 
+# FIXME: favicon pomoci route
+# @app.get("/favicon.ico")
+# async def icon():
+#     return FileResponse("static/stag_favcon.ico")
 
-@app.get("/favicon.ico")
-async def icon():
-    return FileResponse("static/favicon.ico")
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(app, host="localhost", port=8000)

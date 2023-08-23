@@ -18,15 +18,19 @@
 
 </style>
 
-<h1 style="text-align: center">STAG Erasmus</h1>
+<h1 style="text-align: center; font-size: 500%;">STAG Erasmus</h1>
 
+<div class="container justify-content-center mt-5">
 <div class="image-grid">
-  {% for i in katedry %}
-    <a href="/{{i}}">
-      <img src="static/{{i}}.jpg" class="zoom p-3" width="400" height="300" />
+  {% for i in range(6) %}
+    <a href="/{{katedry[i]}}" style="text-decoration: none; color: black; font-size: 80px;">
+      <!-- <img src="static/{{katedry[i]}}.jpg" class="zoom p-3" width="400" height="300" />
+       -->
+       <div class="container d-flex rounded w-50 justify-content-center bg-white zoom">
+        {{katedry[i]}}
+       </div>
     </a>
   {% endfor %}
 </div>
-
 
 {% endblock %}

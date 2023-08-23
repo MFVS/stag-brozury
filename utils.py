@@ -19,18 +19,20 @@ def get_data(department: str):
     shorts = classes.get(department)
     dfs = []
     url = "https://ws.ujep.cz/ws/services/rest2/predmety/getPredmetInfo"
-    vars = {
-        "lang": "en",
-        "outputFormat": "CSV",
-        "katedra": department,
-        "rok": "2022",
-        "outputFormatEncoding": "utf-8",
-    }
+    # vars = {
+    #     "lang": "en",
+    #     "outputFormat": "CSV",
+    #     "katedra": department,
+    #     "rok": "2022",
+    #     "outputFormatEncoding": "utf-8",
+    # }
+    params = f"lang=en&outputFormat=CSV&rok=2022&outputFormatEncoding=utf-8&katedra={department}"
     for short in shorts:
-        data = httpx.get(url, params={**vars, "zkratka": short})
+        # data = httpx.get(url, params={**vars, "zkratka": short})
         dfs.append(
             pd.read_csv(
-                StringIO(data.text),
+                # StringIO(data.text),
+                f"{url}?{params}&zkratka={short}",
                 sep=";",
             )
         )
