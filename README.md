@@ -1,3 +1,7 @@
-# Staghelper
+# Staghelper ERASMUS
 
-`flask --app app run`
+Viewer předmětů pro Erasmus.
+
+``` python
+uvicorn main:app --reload
+```

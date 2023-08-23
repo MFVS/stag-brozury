@@ -24,10 +24,11 @@
 </a>
 {% endblock dropdown %} {% block head %} {% endblock head %} {% block body %} {%
 for i in range(data|length) %}
+<!-- TODO: nadpis soucast containeru -->
 <div class="container d-flex justify-content-center p-4 pt-5">
   <h1 id="{{data[i]['nazev'][0]}}">{{data[i]['nazev'][0]}}</h1>
 </div>
-<div class="container w-50">
+<div class="container w-50 rounded bg-light">
   <table class="table">
     <tbody>
       <tr>

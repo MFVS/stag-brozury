@@ -1,8 +1,10 @@
 import pandas as pd
+import httpx
+from io import StringIO
 
-# TODO: Přeměty podle oborů.
+# TODO: Předměty podle oborů.
 
-katedry = {
+classes = {
     "KI": ["EAPR1", "EAPR2", "ECIS", "EDAV", "ECGR", "NSQL", "RDBS", "EIS"],
     "KMA": ["E101", "E103", "E104", "E105"],
     "KGEO": ["E101", "E100"],
@@ -12,15 +14,23 @@ katedry = {
 }
 
 
-def get_data(katedra):
-    zkratky = katedry.get(katedra)
+def get_data(department: str):
+    shorts = classes.get(department)
     dfs = []
-    for i in zkratky:
+    url = "https://ws.ujep.cz/ws/services/rest2/predmety/getPredmetInfo"
+    vars = {
+        "lang": "en",
+        "outputFormat": "CSV",
+        "katedra": department,
+        "rok": "2022",
+        "outputFormatEncoding": "utf-8",
+    }
+    for short in shorts:
+        data = httpx.get(url, params={**vars, "zkratka": short})
         dfs.append(
             pd.read_csv(
-                f"https://ws.ujep.cz/ws/services/rest2/predmety/getPredmetInfo?zkratka={i}&lang=en&outputFormat=CSV&katedra={katedra}&rok=2022",
+                StringIO(data.text),
                 sep=";",
-                encoding="cp1250",
             )
         )
     return dfs
