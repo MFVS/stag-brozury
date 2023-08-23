@@ -14,6 +14,7 @@ classes = {
 }
 
 
+# TODO: async
 def get_data(department: str):
     shorts = classes.get(department)
     dfs = []

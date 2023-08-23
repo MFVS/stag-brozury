@@ -3,7 +3,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
-from stag_data import get_data, classes
+from utils import get_data, classes
 
 app = FastAPI()
 
