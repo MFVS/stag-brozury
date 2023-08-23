@@ -4,6 +4,8 @@
 
 {% block head %}
 
+<h1 style="text-align: center; font-size: 500%;">{{department}}</h1>
+
 {% endblock head %}
 
 {% block dropdown %}
@@ -13,7 +15,7 @@
   id="dropdownMenuButton1"
   data-bs-toggle="dropdown"
 >
-  {{katedra}}
+  {{department_short}}
 </button>
 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
   {% for i in range(data|length) %}
@@ -24,10 +26,6 @@
   </li>
   {% endfor %}
 </ul>
-
-<a href="/" class="px-3">
-  <img src="static/home-3-svgrepo-com.svg" width="30" />
-</a>
 {% endblock dropdown %} {% block body %} {%
 for i in range(data|length) %}
 <!-- TODO: nadpis soucast containeru -->

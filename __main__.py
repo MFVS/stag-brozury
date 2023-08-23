@@ -19,11 +19,11 @@ async def home(request: Request):
     )
 
 
-@app.get("/{katedra}")
-async def overview(request: Request, katedra: str):
-    data = get_data(katedra)
+@app.get("/{deparment_short}")
+async def overview(request: Request, deparment_short: str):
+    data, department = get_data(deparment_short)
     return templates.TemplateResponse(
-        "predmet.html", {"request": request, "data": data, "katedra": katedra}
+        "predmet.html", {"request": request, "data": data, "department_short": deparment_short, "department": department}
     )
 
 # FIXME: favicon pomoci route

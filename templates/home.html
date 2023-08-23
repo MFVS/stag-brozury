@@ -3,7 +3,6 @@
   .zoom {
     transition: transform 0.2s;
     object-fit: cover;
-    text-decoration: none;
   }
 
   .zoom:hover {
@@ -12,23 +11,19 @@
 
   .image-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Creates a flexible grid with a minimum column width of 300px */
-    gap: 80px; /* Spacing between grid items */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 80px;
   }
 
 </style>
 
 <h1 style="text-align: center; font-size: 500%;">STAG Erasmus</h1>
 
-<div class="container justify-content-center mt-5">
+<div class="container justify-content-center pt-5 mt-5">
 <div class="image-grid">
   {% for i in range(6) %}
-    <a href="/{{katedry[i]}}" style="text-decoration: none; color: black; font-size: 80px;">
-      <!-- <img src="static/{{katedry[i]}}.jpg" class="zoom p-3" width="400" height="300" />
-       -->
-       <div class="container d-flex rounded w-50 justify-content-center bg-white zoom">
+    <a href="/{{katedry[i]}}" style="font-size: 500%;" class="btn btn-outline-success zoom w-75">
         {{katedry[i]}}
-       </div>
     </a>
   {% endfor %}
 </div>
