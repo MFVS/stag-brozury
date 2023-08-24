@@ -27,9 +27,9 @@ async def overview(request: Request, deparment_short: str):
     )
 
 # FIXME: favicon pomoci route
-# @app.get("/favicon.ico")
-# async def icon():
-#     return FileResponse("static/stag_favcon.ico")
+@app.get("/favicon.ico")
+async def icon():
+    return FileResponse("static/stag_favcon.ico")
 
 if __name__ == "__main__":
     import uvicorn
