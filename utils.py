@@ -5,7 +5,10 @@ from io import StringIO
 # TODO: Předměty podle oborů.
 
 classes = {
-    "KI": (["EAPR1", "EAPR2", "ECIS", "EDAV", "ECGR", "NSQL", "RDBS", "EIS"], "Department of Informatics"),
+    "KI": (
+        ["EAPR1", "EAPR2", "ECIS", "EDAV", "ECGR", "NSQL", "RDBS", "EIS"],
+        "Department of Informatics",
+    ),
     "KMA": (["E101", "E103", "E104", "E105"], "Department of Mathematics"),
     "KGEO": (["E101", "E100"], "Department of Geography"),
     "KBI": (["E107", "E106", "E105"], "Department of Biology"),

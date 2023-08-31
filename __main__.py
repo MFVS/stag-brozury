@@ -23,13 +23,21 @@ async def home(request: Request):
 async def overview(request: Request, deparment_short: str):
     data, department = get_data(deparment_short)
     return templates.TemplateResponse(
-        "predmet.html", {"request": request, "data": data, "department_short": deparment_short, "department": department}
+        "predmet.html",
+        {
+            "request": request,
+            "data": data,
+            "department_short": deparment_short,
+            "department": department,
+        },
     )
+
 
 # FIXME: favicon pomoci route
 @app.get("/favicon.ico")
 async def icon():
     return FileResponse("static/stag_favcon.ico")
+
 
 if __name__ == "__main__":
     import uvicorn
