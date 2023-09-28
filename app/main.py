@@ -3,12 +3,12 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
-from utils import get_data, classes
+from .utils import get_data, classes
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+templates = Jinja2Templates(directory="app/templates")
 
 
 @app.get("/")
@@ -37,7 +37,6 @@ async def overview(request: Request, deparment_short: str):
 @app.get("/favicon.ico")
 async def icon():
     return FileResponse("static/stag_favcon.ico")
-
 
 if __name__ == "__main__":
     import uvicorn
