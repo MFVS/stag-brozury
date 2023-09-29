@@ -1,0 +1,30 @@
+{% extends 'index.html' %}
+{% block head %}
+{% endblock %}
+{% block body %}
+
+<h1>Studijní programy</h1>
+
+<div class="container">
+    <div class="row">
+        {% for index, row in df.iterrows() %}
+        <div class="col s12 m6 l4">
+            <div class="card hoverable">
+                <div class="card-image">
+                    <img class="activator" src="/static/student.jpg">
+                </div>
+                <div class="card-content">
+                    <span class="card-title activator grey-text text-darken-4">{{ row['nazev'] }}<i class="material-icons right">info</i></span>
+                    <p><a href="/#">Přejít na detail </a></p>
+                </div>
+                <div class="card-reveal">
+                    <span class="card-title grey-text text-darken-4">{{ row['nazev'] }}<i class="material-icons right">close</i></span>
+                    <p>{{ row['cile'] }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

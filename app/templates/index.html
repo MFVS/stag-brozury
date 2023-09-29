@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>STAG • Studijní programy</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="/static/materialize/css/materialize.css" media="screen,projection">
+    <script type="text/javascript" src="/static/materialize/js/materialize.js"></script>
+
+    <style>
+        body {
+            background-image: url("/static/dots.jpg");
+            background-repeat: repeat;
+            background-size: 5%;
+        }
+
+        h1 {
+            text-align: center;
+            padding-bottom: 50px;
+        }
+    </style>
+
+    {% block head %}{% endblock %}
+</head>
+<body>
+<nav class="teal transparent z-depth-0">
+    <div class="nav-wrapper">
+        <a style="padding: 10px;" href="https://prf.ujep.cz/cs/" class="brand-logo right"><img src="/static/prf_logo.svg" height="50vh"/></a>
+        <ul id="nav-mobile" class="left hide-on-med-and-down">
+            {% block dropdown %}{% endblock dropdown %}
+        </ul>
+    </div>
+</nav>
+
+{% block body %}{% endblock %}
+</body>
+</html>

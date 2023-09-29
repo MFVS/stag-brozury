@@ -1,6 +1,6 @@
 <!-- TODO: vyučování, správné jednotky (semináře, cvičení, přednášky) -->
 
-{% extends 'base.html' %}
+{% extends 'index.html' %}
 
 {% block head %}
 
@@ -9,31 +9,13 @@
 {% endblock head %}
 
 {% block dropdown %}
-<button
-  class="btn btn-outline-dark dropdown-toggle"
-  type="button"
-  id="dropdownMenuButton1"
-  data-bs-toggle="dropdown"
->
-  {{department_short}}
-</button>
-<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-  {% for i in range(data|length) %}
-  <li>
-    <a class="dropdown-item" href="#{{data[i]['nazev'][0]}}"
-      >{{ data[i]['nazev'][0] }}</a
-    >
-  </li>
-  {% endfor %}
-</ul>
 {% endblock dropdown %} {% block body %} {%
 for i in range(data|length) %}
-<!-- TODO: nadpis soucast containeru -->
-<div class="container d-flex justify-content-center w-50 p-4 pt-5 mt-5 rounded bg-white">
+<div class="container">
   <h1 id="{{data[i]['nazev'][0]}}">{{data[i]['nazev'][0]}}</h1>
 </div>
-<div class="container w-50 rounded bg-white">
-  <table class="table">
+<div class="container">
+  <table>
     <tbody>
       <tr>
         <th>Course code</th>

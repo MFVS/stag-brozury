@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "stag-brozury"
 version = "0.1.0"
-description = ""
+description = "Aplikace pro zobrazení studijních programů na PřF UJEP"
 authors = ["yoptohlejepeta <peta.kotlan@seznam.cz>"]
 license = "MIT"
 readme = "README.md"

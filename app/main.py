@@ -1,11 +1,16 @@
 from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import RedirectResponse
 
-from .utils import get_data, classes
+from .routers import ws
+from .utils import a_get_df
 
-app = FastAPI()
+app = FastAPI(
+    docs_url=None,
+    redoc_url=None,
+    title="STAG API",
+)
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
@@ -13,32 +18,7 @@ templates = Jinja2Templates(directory="app/templates")
 
 @app.get("/")
 async def home(request: Request):
-    departments = list(classes.keys())
-    return templates.TemplateResponse(
-        "home.html", {"request": request, "katedry": departments}
-    )
+    return RedirectResponse(url="/ws/programy")
 
-
-@app.get("/{deparment_short}")
-async def overview(request: Request, deparment_short: str):
-    data, department = get_data(deparment_short)
-    return templates.TemplateResponse(
-        "predmet.html",
-        {
-            "request": request,
-            "data": data,
-            "department_short": deparment_short,
-            "department": department,
-        },
-    )
-
-
-# FIXME: favicon pomoci route
-@app.get("/favicon.ico")
-async def icon():
-    return FileResponse("static/stag_favcon.ico")
-
-if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run(app, host="localhost", port=8000)
+    
+app.include_router(ws.router)
