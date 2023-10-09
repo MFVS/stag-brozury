@@ -1,0 +1,47 @@
+{% extends 'index.html' %}
+{% block head %}
+<section class="hero is-medium is-link">
+    <div class="hero-body">
+      <p class="title">
+        {{ df['nazev'][0] }}
+      </p>
+      <p class="subtitle">
+        {{ df['zkratka'][0] }}
+      </p>
+    </div>
+  </section>
+{% endblock %}
+{% block body %}
+<div class="container" style="padding-top: 30px;">
+    <div class="tile is-ancestor is-light">
+        <div class="tile is-4 is-vertical is-parent">
+          <div class="tile is-child box has-background-light">
+            <p class="title">Přehled</p>
+            <p>
+                <span class="has-text-weight-bold">
+                    Typ studia:
+                </span> {{ df['typ'][0] }}
+            </p>
+            <p>
+                <span class="has-text-weight-bold">
+                    Forma studia:
+                </span> {{ df['forma'][0] }}
+            </p>
+          </div>
+          <div class="tile is-child box has-background-light">
+            <p class="title">Garant</p>
+            <p>{{ df['garant'][0] }}</p>
+          </div>
+        </div>
+        <div class="tile is-parent">
+          <div class="tile is-child box has-background-light">
+            <p class="title">Anotace studijního programu</p>
+            <p>{{ df['anotace'][0] }}</p>
+          </div>
+        </div>
+      </div>
+
+      <h1 class="is-size-1 has-text-centered" style="padding: 50px;">Předmety</h1>
+</div>
+
+{% endblock %}

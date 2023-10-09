@@ -20,5 +20,10 @@ templates = Jinja2Templates(directory="app/templates")
 async def home(request: Request):
     return RedirectResponse(url="/ws/programy")
 
-    
+
+@app.get("/favicon.ico")
+async def favicon():
+    return RedirectResponse(url="/static/stag_favcon.ico")
+
+
 app.include_router(ws.router)

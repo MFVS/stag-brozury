@@ -26,3 +26,7 @@ povinne-->
 blokIdno: 39350
 
 getPredmetyByBlokFullInfo
+
+## Odkazy
+
+<https://myjsmeujep.cz/program/matematika-ve-firmach-a-verejne-sprave/>

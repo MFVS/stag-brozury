@@ -3,30 +3,32 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>STAG • Studijní programy</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="/static/materialize/css/materialize.css" media="screen,projection">
-    <script type="text/javascript" src="/static/materialize/js/materialize.js"></script>
+    <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
+    <title>STAG • Studijní programy</title>
 
-    <style>
-        h1 {
-            text-align: center;
-            padding-bottom: 50px;
-        }
-    </style>
+    <nav class="navbar is-transparent">
+      <div class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="/">
+            Domů
+          </a>
+        </div>
+    
+        <div class="navbar-end">
+          <div class="navbar-brand">
+              <a class="navbar-item" href="">
+                <img src="/static/prf_logo.svg" height="50">
+              </a>
+            </div>
+        </div>
+      </div>
+    </nav>
 
     {% block head %}{% endblock %}
 </head>
 <body>
-<nav class="teal transparent z-depth-0">
-    <div class="nav-wrapper">
-        <a style="padding: 10px;" href="https://prf.ujep.cz/cs/" class="brand-logo right"><img src="/static/prf_logo.svg" height="50vh"/></a>
-        <ul id="nav-mobile" class="left hide-on-med-and-down">
-            {% block dropdown %}{% endblock dropdown %}
-        </ul>
-    </div>
-</nav>
-
 {% block body %}{% endblock %}
 </body>
 </html>
