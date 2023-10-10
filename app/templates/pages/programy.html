@@ -3,13 +3,26 @@
 {% endblock %}
 {% block body %}
 
-<h1 class="is-size-1 has-text-centered" style="padding: 50px;">Studijní programy</h1>
+<!-- <h1 class="is-size-1 has-text-centered" style="padding: 50px;">Studijní programy</h1> -->
 
-<div class="container">
+<section class="hero is is-primary">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">
+                Studijní programy
+            </h1>
+            <h2 class="subtitle">
+                Přehled všech studijních programů
+            </h2>
+        </div>
+    </div>
+</section>
+
+<div class="container p-5">
     <div class="columns is-multiline is-centered">
         {% for index, row in df.iterrows() %}
         <div class="column is-6-tablet is-3-desktop is-8-widescreen is-4-fullhd">
-            <div class="card has-background-light">
+            <div class="card has-background-light is-hoverable">
                 <div class="card-content">
                     <div class="title is-5">
                         {{ row['nazev'] }}
