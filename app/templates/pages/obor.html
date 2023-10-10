@@ -1,6 +1,6 @@
 {% extends 'index.html' %}
 {% block head %}
-<section class="hero is-medium is-link">
+<section class="hero is-medium is-info">
     <div class="hero-body">
       <p class="title">
         {{ df['nazev'][0] }}
@@ -41,7 +41,16 @@
         </div>
       </div>
 
-      <h1 class="is-size-1 has-text-centered" style="padding: 50px;">Předmety</h1>
+      <hr>
+
+      <h1 class="is-size-1 has-text-centered p-5">Studijní plán</h1>
+      <div class="tabs is-centered is-boxed is-medium p-5">
+        <ul>
+          <li class="is-active"><a>Povinné předměty</a></li>
+          <li><a>Povinně volitelné předměty</a></li>
+          <li><a>Volitelné přeměty</a></li>
+        </ul>
+      </div>
 </div>
 
 {% endblock %}

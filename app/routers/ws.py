@@ -18,7 +18,7 @@ async def get_programs(request: Request):
         "lang": "cs",
         "outputFormat": "CSV",
         "outputFormatEncoding": "utf-8",
-        "rok": 2023,
+        # "rok": 2023,
         "forma": "P",
     }
 
