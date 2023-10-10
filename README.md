@@ -27,6 +27,10 @@ blokIdno: 39350
 
 getPredmetyByBlokFullInfo
 
+## Backlog
+
+- [ ] Nahradit divy v `templates/pages/*.html` za něco normálního.
+
 ## Odkazy
 
 <https://myjsmeujep.cz/program/matematika-ve-firmach-a-verejne-sprave/>
