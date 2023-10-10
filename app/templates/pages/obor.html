@@ -1,9 +1,10 @@
 {% extends 'index.html' %}
 {% block head %}
+{% endblock %}
 
-<style>
-  /* Custom CSS to add a background image to the Hero */
-  /* .hero {
+
+<!-- <style>
+  .hero {
       background-image: url('/static/study.jpg');
       background-size: cover;
       background-position: center;
@@ -11,21 +12,23 @@
 
   .hero-body {
       background-color: rgb(64, 224, 208, 0.6);
-  } */
-</style>
+  }
+</style> -->
+{% block body %}
 
 <section class="hero is-medium is-primary">
     <div class="hero-body">
-      <p class="title">
+      <div class="container">
+      <h1 class="title">
         {{ df['nazev'][0] }}
-      </p>
-      <p class="subtitle">
+      </h1>
+      <h2 class="subtitle">
         {{ df['zkratka'][0] }}
-      </p>
+      </h2>
     </div>
-  </section>
-{% endblock %}
-{% block body %}
+    </div>
+</section>
+
 <div class="container" style="padding-top: 30px;">
     <div class="tile is-ancestor is-light">
         <div class="tile is-4 is-vertical is-parent">
