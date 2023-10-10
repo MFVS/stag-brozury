@@ -60,13 +60,26 @@
 
       <hr>
 
-      <h1 class="is-size-1 has-text-centered p-5">Studijní plán</h1>
+      <h1 class="is-size-1 has-text-centered">Studijní plán</h1>
       <div class="tabs is-centered is-boxed is-medium p-5">
         <ul>
-          <li class="is-active"><a>Povinné předměty</a></li>
+          <li class="is-active">
+            <a hx-get="/ws/predmety/{{df['oborIdno'][0]}}/idk"
+            hx-swap="outerHtml"
+            hx-target="#predmety"
+            hx-indicator="#progress"
+            hx-trigger="click, load"
+            class="is-sel">
+              Povinné předměty</a></li>
           <li><a>Povinně volitelné předměty</a></li>
           <li><a>Volitelné přeměty</a></li>
         </ul>
+      </div>
+
+      <progress id="progress" class="progress is-primary htmx-indicator"></progress>
+
+      <div id="predmety">
+
       </div>
 </div>
 

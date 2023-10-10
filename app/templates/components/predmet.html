@@ -1,0 +1,52 @@
+{% for index, row in df.iterrows() %}
+<div class="box p-5">
+<div class="container is-max-desktop">
+  <h1 class="title is-medium has-text-centered p-3" id="{{row['nazev']}}">{{row['nazev']}}</h1>
+  <table class="table">
+    <tbody>
+      <tr>
+        <th>Kód kurzu</th>
+        <td>{{ row['katedra'] }}/{{ row['zkratka'] }}</td>
+      </tr>
+      <tr>
+        <th>Počet kreditů</th>
+        <td>{{ row['kreditu'] }}</td>
+      </tr>
+      <tr>
+        <th>Vzučující</th>
+        <td>
+          {{ (row['prednasejici'] | string).translate({39:None}) }}
+        </td>
+      </tr>
+      <tr>
+        <th>Semestr</th>
+        <td>
+          {% if row['vyukaZS'] == 'A' %} Zimní {% else %} Letní {%
+          endif %}
+        </td>
+      </tr>
+
+      <tr>
+        <th>Přednášky/cvičení</th>
+        <td>
+          {{ row['jednotekPrednasek']}}/{{ row['jednotekCviceni']
+          }} HOD/TYD
+        </td>
+      </tr>
+      <tr>
+        <th>Zakončení</th>
+        <td>{{ row['typZkousky'] }}</td>
+      </tr>
+      <tr>
+        <td colspan="2">{{ row['anotace'] }}</td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          {{ row['prehledLatky'] | replace("\n", "<br />" | safe ) }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</div>
+{% endfor %}

@@ -42,3 +42,56 @@ async def get_obor(request: Request, obor_idno: int):
     df = await a_get_df(url, vars)
 
     return templates.TemplateResponse("pages/obor.html", {"request": request, "df": df})
+
+
+@router.get("/predmety/{obor_idno}/{typ}")
+async def get_predmety(request: Request, obor_idno: int, typ: str):
+    url = "https://ws.ujep.cz/ws/services/rest2/programy/getPlanyOboru"
+    vars = {
+        "oborIdno": obor_idno,
+        "lang": "cs",
+        "outputFormat": "CSV",
+        "outputFormatEncoding": "utf-8",
+    }
+
+    df = await a_get_df(url, vars)
+    stplIdno = df["stplIdno"][0]
+    
+    url = "https://ws.ujep.cz/ws/services/rest2/programy/getSegmentyPlanu"
+    
+    vars = {
+        "stplIdno": stplIdno,
+        "lang": "cs",
+        "outputFormat": "CSV",
+        "outputFormatEncoding": "utf-8",
+    }
+    
+    df = await a_get_df(url, vars)
+    # first row    
+    sespIdno = df["sespIdno"][0]
+    
+    url = "https://ws.ujep.cz/ws/services/rest2/programy/getBlokySegmentu"
+    vars = {
+        "sespIdno": sespIdno,
+        "lang": "cs",
+        "outputFormat": "CSV",
+        "outputFormatEncoding": "utf-8",
+    }
+    
+    df = await a_get_df(url, vars)
+    blokidno = df["blokIdno"][0]
+    
+    url = "https://ws.ujep.cz/ws/services/rest2/predmety/getPredmetyByBlokFullInfo"
+    vars = {
+        "blokIdno": blokidno,
+        "lang": "cs",
+        "outputFormat": "CSV",
+        "outputFormatEncoding": "utf-8",
+    }
+    
+    df = await a_get_df(url, vars)
+    
+    
+    return templates.TemplateResponse(
+        "components/predmet.html", {"request": request, "df": df}
+    )
