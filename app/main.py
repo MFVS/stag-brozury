@@ -18,7 +18,7 @@ templates = Jinja2Templates(directory="app/templates")
 
 @app.get("/")
 async def home(request: Request):
-    return RedirectResponse(url="/ws/programy")
+    return templates.TemplateResponse("pages/home.html", {"request": request})
 
 
 @app.get("/favicon.ico")

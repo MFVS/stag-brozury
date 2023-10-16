@@ -1,24 +1,9 @@
 {% extends 'index.html' %}
-{% block head %}
-{% endblock %}
-
-
-<!-- <style>
-  .hero {
-      background-image: url('/static/study.jpg');
-      background-size: cover;
-      background-position: center;
-  }
-
-  .hero-body {
-      background-color: rgb(64, 224, 208, 0.6);
-  }
-</style> -->
 {% block body %}
 
 <section class="hero is-medium is-primary">
-    <div class="hero-body">
-      <div class="container">
+  <div class="hero-body">
+    <div class="container">
       <h1 class="title">
         {{ df['nazev'][0] }}
       </h1>
@@ -26,61 +11,60 @@
         {{ df['zkratka'][0] }}
       </h2>
     </div>
-    </div>
+  </div>
 </section>
+<progress id="progress" class="progress is-primary htmx-indicator"></progress>
 
 <div class="container p-5">
-    <div class="tile is-ancestor is-light">
-        <div class="tile is-4 is-vertical is-parent">
-          <div class="tile is-child box has-background-light">
-            <p class="title">Přehled</p>
-            <p>
-                <span class="has-text-weight-bold">
-                    Typ studia:
-                </span> {{ df['typ'][0] }}
-            </p>
-            <p>
-                <span class="has-text-weight-bold">
-                    Forma studia:
-                </span> {{ df['forma'][0] }}
-            </p>
-          </div>
-          <div class="tile is-child box has-background-light">
-            <p class="title">Garant</p>
-            <p>{{ df['garant'][0] }}</p>
-          </div>
-        </div>
-        <div class="tile is-parent">
-          <div class="tile is-child box has-background-light">
-            <p class="title">Anotace studijního programu</p>
-            <p>{{ df['anotace'][0] }}</p>
-          </div>
-        </div>
+  <div class="tile is-ancestor is-light">
+    <div class="tile is-4 is-vertical is-parent">
+      <div class="tile is-child box has-background-light">
+        <p class="title">Přehled</p>
+        <p>
+          <span class="has-text-weight-bold">
+            Typ studia:
+          </span> {{ df['typ'][0] }}
+        </p>
+        <p>
+          <span class="has-text-weight-bold">
+            Forma studia:
+          </span> {{ df['forma'][0] }}
+        </p>
       </div>
-
-      <hr>
-
-      <h1 class="is-size-1 has-text-centered">Studijní plán</h1>
-      <div class="tabs is-centered is-boxed is-medium p-5">
-        <ul>
-          <li>
-            <a hx-get="/ws/predmety/{{df['oborIdno'][0]}}/idk"
-            hx-swap="outerHtml"
-            hx-target="#predmety"
-            hx-indicator="#progress"
-            hx-trigger="click, load"
-            class="is-sel">
-              Povinné předměty</a></li>
-          <li><a>Povinně volitelné předměty</a></li>
-          <li><a>Volitelné přeměty</a></li>
-        </ul>
+      <div class="tile is-child box has-background-light">
+        <p class="title">Garant</p>
+        <p>{{ df['garant'][0] }}</p>
       </div>
-
-      <progress id="progress" class="progress is-primary htmx-indicator"></progress>
-
-      <div id="predmety">
-
+    </div>
+    <div class="tile is-parent">
+      <div class="tile is-child box has-background-light">
+        <p class="title">Anotace studijního programu</p>
+        <p>{{ df['anotace'][0] }}</p>
       </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <h1 class="is-size-1 has-text-centered">Studijní plán</h1>
+  <div class="tabs is-centered is-boxed is-medium p-5">
+    <ul>
+      <li>
+        <a 
+        hx-get="/ws/predmety/{{df['oborIdno'][0]}}/idk" 
+        hx-swap="outerHtml" 
+        hx-target="#predmety"
+        hx-indicator="#progress">
+          Povinné předměty</a>
+      </li>
+      <li><a>Povinně volitelné předměty</a></li>
+      <li><a>Volitelné přeměty</a></li>
+    </ul>
+  </div>
+
+  <div id="predmety">
+
+  </div>
 </div>
 
 {% endblock %}

@@ -2,7 +2,7 @@
 <div class="box p-5">
 <div class="container is-max-desktop">
   <h1 class="title is-medium has-text-centered p-3" id="{{row['nazev']}}">{{row['nazev']}}</h1>
-  <table class="table">
+  <table class="table is-align-self-center">
     <tbody>
       <tr>
         <th>Kód kurzu</th>
@@ -21,8 +21,11 @@
       <tr>
         <th>Semestr</th>
         <td>
-          {% if row['vyukaZS'] == 'A' %} Zimní {% else %} Letní {%
-          endif %}
+          {% if row['vyukaZS'] == 'A' %}
+          Zimní
+          {% else %}
+          Letní 
+          {% endif %}
         </td>
       </tr>
 
