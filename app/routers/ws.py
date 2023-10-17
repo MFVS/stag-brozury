@@ -22,7 +22,7 @@ async def get_programs(
     )
     url = "https://ws.ujep.cz/ws/services/rest2/programy/getStudijniProgramy"
     vars = {
-        "fakulta": "PRF",  # programme.faculty,
+        "fakulta": programme.faculty,
         "pouzePlatne": True,
         "jazyk": "CZ",
         "lang": "cs",
