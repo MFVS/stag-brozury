@@ -2,7 +2,7 @@
 <div class="box p-5">
 <div class="container is-max-desktop">
   <h1 class="title is-medium has-text-centered p-3" id="{{row['nazev']}}">{{row['nazev']}}</h1>
-  <table class="table is-align-self-center">
+  <table class="table mx-auto">
     <tbody>
       <tr>
         <th>Kód kurzu</th>
@@ -13,7 +13,7 @@
         <td>{{ row['kreditu'] }}</td>
       </tr>
       <tr>
-        <th>Vzučující</th>
+        <th>Vyučující</th>
         <td>
           {{ (row['prednasejici'] | string).translate({39:None}) }}
         </td>
