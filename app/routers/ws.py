@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Request, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
+import pandas as pd
 
 from ..utils import a_get_df
 from ..models import StudyProgramme
@@ -20,21 +21,16 @@ async def get_programs(
     programme = StudyProgramme(
         faculty=faculty, study_form=study_form, programme_type=programme_type
     )
-    url = "https://ws.ujep.cz/ws/services/rest2/programy/getStudijniProgramy"
-    vars = {
-        "fakulta": programme.faculty,
-        "pouzePlatne": True,
-        "jazyk": "CZ",
-        "lang": "cs",
-        "outputFormat": "CSV",
-        "outputFormatEncoding": "utf-8",
-        # "rok": 2023,
-        "typ": programme.programme_type,
-        "forma": programme.study_form,
-    }
+    
+    df = pd.read_csv("df.csv")
 
-    df = await a_get_df(url, vars)
-
+    if programme.faculty:
+        df = df.loc[df["fakulta"] == faculty]
+    elif programme.study_form:
+        df = df.loc[df["forma"] == study_form]
+    elif programme.programme_type:
+        df = df.loc[df["typ"] == programme_type]
+            
     if df.empty:
         html_content = """
             <div class="container has-text-centered">
@@ -77,7 +73,7 @@ async def get_predmety(request: Request, obor_idno: int, typ: str):
 
     df = await a_get_df(url, vars)
     stplIdno = df["stplIdno"][0]
-
+    print(stplIdno)
     url = "https://ws.ujep.cz/ws/services/rest2/programy/getSegmentyPlanu"
 
     vars = {
