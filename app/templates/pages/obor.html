@@ -5,10 +5,10 @@
   <div class="hero-body">
     <div class="container">
       <h1 class="title">
-        {{ df['nazev'][0] }}
+        {{ df_obor['nazev'][0] }}
       </h1>
       <h2 class="subtitle">
-        {{ df['zkratka'][0] }}
+        {{ df_obor['zkratka'][0] }}
       </h2>
     </div>
   </div>
@@ -23,23 +23,23 @@
         <p>
           <span class="has-text-weight-bold">
             Typ studia:
-          </span> {{ df['typ'][0] }}
+          </span> {{ df_obor['typ'][0] }}
         </p>
         <p>
           <span class="has-text-weight-bold">
             Forma studia:
-          </span> {{ df['forma'][0] }}
+          </span> {{ df_obor['forma'][0] }}
         </p>
       </div>
       <div class="tile is-child box has-background-light">
         <p class="title">Garant</p>
-        <p>{{ df['garant'][0] }}</p>
+        <p>{{ df_obor['garant'][0] }}</p>
       </div>
     </div>
     <div class="tile is-parent">
       <div class="tile is-child box has-background-light">
         <p class="title">Anotace studijního programu</p>
-        <p>{{ df['anotace'][0] }}</p>
+        <p>{{ df_obor['anotace'][0] }}</p>
       </div>
     </div>
   </div>
@@ -49,21 +49,16 @@
   <h1 class="is-size-1 has-text-centered">Studijní plán</h1>
   <div class="tabs is-centered is-boxed is-medium p-5">
     <ul>
-      <li id="pk">
-        <a
-        _="on click add .is-active to #pk remove .is-active from [#pvk, #vk]"
-        hx-get="/ws/predmety/{{df['oborIdno'][0]}}/idk" 
+      {% for index, row in df_skupiny.iterrows() %}
+      <li id="{{ row['zkratka'] }}">
+        <a _="on click add .is-active to #{{ row['zkratka'] }}"
+        hx-get="/ws/predmety/{{row['sespIdno']}}" 
         hx-swap="outerHtml" 
         hx-target="#predmety"
         hx-indicator="#progress">
-          Povinné předměty</a>
+          {{ row['nazev'] }}</a>
       </li>
-      <li id="pvk">
-        <a _="on click add .is-active to #pvk remove .is-active from [#pk, #vk]">Povinně volitelné předměty</a>
-      </li>
-      <li id="vk">
-        <a _="on click add .is-active to #vk remove .is-active from [#pk, #pvk]">Volitelné přeměty</a>
-      </li>
+      {% endfor %}
     </ul>
   </div>
 

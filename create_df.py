@@ -18,15 +18,15 @@ df = df.loc[df["vykazovan"] == "A"]
 
 url = "https://ws.ujep.cz/ws/services/rest2/programy/getOboryStudijnihoProgramu"
 
-tmp = [       
+tmp = [
     await a_get_df(
         url,
         {
-        "stprIdno": stprIdno,
-        "lang": "cs",
-        "outputFormat": "CSV",
-        "outputFormatEncoding": "utf-8",
-    },
+            "stprIdno": stprIdno,
+            "lang": "cs",
+            "outputFormat": "CSV",
+            "outputFormatEncoding": "utf-8",
+        },
     )
     for stprIdno in df["stprIdno"]
 ]

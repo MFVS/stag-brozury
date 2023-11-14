@@ -21,7 +21,7 @@ async def get_programs(
     programme = StudyProgramme(
         faculty=faculty, study_form=study_form, programme_type=programme_type
     )
-    
+
     df = pd.read_csv("df.csv")
 
     if programme.faculty:
@@ -30,7 +30,7 @@ async def get_programs(
         df = df.loc[df["forma"] == study_form]
     elif programme.programme_type:
         df = df.loc[df["typ"] == programme_type]
-            
+
     if df.empty:
         html_content = """
             <div class="container has-text-centered">
@@ -56,13 +56,10 @@ async def get_obor(request: Request, obor_idno: int):
         "outputFormatEncoding": "utf-8",
     }
 
-    df = await a_get_df(url, vars)
+    df_obor = await a_get_df(url, vars)
+    
+    obor_idno = df_obor["oborIdno"][0]
 
-    return templates.TemplateResponse("pages/obor.html", {"request": request, "df": df})
-
-
-@router.get("/predmety/{obor_idno}/{typ}")
-async def get_predmety(request: Request, obor_idno: int, typ: str):
     url = "https://ws.ujep.cz/ws/services/rest2/programy/getPlanyOboru"
     vars = {
         "oborIdno": obor_idno,
@@ -71,9 +68,8 @@ async def get_predmety(request: Request, obor_idno: int, typ: str):
         "outputFormatEncoding": "utf-8",
     }
 
-    df = await a_get_df(url, vars)
-    stplIdno = df["stplIdno"][0]
-    print(stplIdno)
+    help_df = await a_get_df(url, vars)
+    stplIdno = help_df["stplIdno"][0]
     url = "https://ws.ujep.cz/ws/services/rest2/programy/getSegmentyPlanu"
 
     vars = {
@@ -83,13 +79,19 @@ async def get_predmety(request: Request, obor_idno: int, typ: str):
         "outputFormatEncoding": "utf-8",
     }
 
-    df = await a_get_df(url, vars)
-    # first row
-    sespIdno = df["sespIdno"][0]
+    df_skupiny = await a_get_df(url, vars)
 
+    return templates.TemplateResponse(
+        "pages/obor.html",
+        {"request": request, "df_obor": df_obor, "df_skupiny": df_skupiny},
+    )
+
+
+@router.get("/predmety/{sesp_idno}")
+async def get_predmety_skupiny(request: Request, sesp_idno: int):
     url = "https://ws.ujep.cz/ws/services/rest2/programy/getBlokySegmentu"
     vars = {
-        "sespIdno": sespIdno,
+        "sespIdno": sesp_idno,
         "lang": "cs",
         "outputFormat": "CSV",
         "outputFormatEncoding": "utf-8",
