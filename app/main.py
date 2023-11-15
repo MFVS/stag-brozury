@@ -7,7 +7,7 @@ from .routers import ws
 from .utils import a_get_df
 
 app = FastAPI(
-    docs_url=None,
+    docs_url="/docs",
     redoc_url=None,
     title="STAG API",
 )

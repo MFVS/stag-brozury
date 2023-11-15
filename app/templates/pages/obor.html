@@ -51,7 +51,8 @@
     <ul>
       {% for index, row in df_skupiny.iterrows() %}
       <li id="{{ row['zkratka'] }}">
-        <a _="on click add .is-active to #{{ row['zkratka'] }}"
+        <!-- _="on click add .is-active to #{{ row['zkratka'] }}" -->
+        <a  
         hx-get="/ws/predmety/{{row['sespIdno']}}" 
         hx-swap="outerHtml" 
         hx-target="#predmety"

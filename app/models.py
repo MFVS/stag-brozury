@@ -12,6 +12,7 @@ class StudyProgramme(BaseModel):
     faculty: str | None
     study_form: str | None  # prezencne atd.
     programme_type: str | None  # bakalar, navazujici atd.
+    programme: str | None # vyhledavani konkretniho predmetu
 
     normalize_all = field_validator("*", mode="before")(normalize_all)
 
@@ -22,11 +23,5 @@ class StudyProgramme(BaseModel):
             "Kombinovaná": "K",
             "Distanční": "D",
         }
-
-        return vals_dict.get(v)
-
-    @field_validator("programme_type")
-    def chech_programme_type(cls, v):
-        vals_dict = {"Bakalářský": 7, "Navazující": 0}
 
         return vals_dict.get(v)

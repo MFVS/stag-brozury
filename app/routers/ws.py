@@ -14,22 +14,27 @@ templates = Jinja2Templates(directory="app/templates")
 @router.post("/programy")
 async def get_programs(
     request: Request,
-    faculty: str = Form(...),
-    study_form: str = Form(...),
-    programme_type: str = Form(...),
+    faculty: str = Form(None),
+    study_form: str = Form(None),
+    programme_type: str = Form(None),
+    programme: str = Form(None),    
 ):
-    programme = StudyProgramme(
-        faculty=faculty, study_form=study_form, programme_type=programme_type
+    study_programme = StudyProgramme(
+        faculty=faculty, study_form=study_form, programme_type=programme_type, programme=programme
     )
 
     df = pd.read_csv("df.csv")
 
-    if programme.faculty:
+    if study_programme.faculty:
         df = df.loc[df["fakulta"] == faculty]
-    elif programme.study_form:
+    if study_programme.study_form:
         df = df.loc[df["forma"] == study_form]
-    elif programme.programme_type:
+    if study_programme.programme_type:
         df = df.loc[df["typ"] == programme_type]
+    if study_programme.programme:
+        df = df[df['nazev'].str.contains(study_programme.programme, case=False, na=False)]
+    
+    print(df.typ)
 
     if df.empty:
         html_content = """
