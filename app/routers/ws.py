@@ -17,7 +17,7 @@ async def get_programs(
     faculty: str = Form(None),
     study_form: str = Form(None),
     programme_type: str = Form(None),
-    programme: str = Form(None),    
+    programme: str = Form(None),
 ):
     study_programme = StudyProgramme(
         faculty=faculty, study_form=study_form, programme_type=programme_type, programme=programme
@@ -34,8 +34,6 @@ async def get_programs(
     if study_programme.programme:
         df = df[df['nazev'].str.contains(study_programme.programme, case=False, na=False)]
     
-    print(df.typ)
-
     if df.empty:
         html_content = """
             <div class="container has-text-centered">
@@ -86,9 +84,45 @@ async def get_obor(request: Request, obor_idno: int):
 
     df_skupiny = await a_get_df(url, vars)
 
+    temp_dfs = []
+
+    for sesp_idno in df_skupiny["sespIdno"]:
+        url = "https://ws.ujep.cz/ws/services/rest2/programy/getBlokySegmentu"
+        vars = {
+            "sespIdno": sesp_idno,
+            "lang": "cs",
+            "outputFormat": "CSV",
+            "outputFormatEncoding": "utf-8",
+        }
+        temp_df = await a_get_df(url, vars)
+        blokidno = temp_df["blokIdno"][0]
+
+        url = "https://ws.ujep.cz/ws/services/rest2/predmety/getPredmetyByBlokFullInfo"
+        
+        vars = {
+            "blokIdno": blokidno,
+            "lang": "cs",
+            "outputFormat": "CSV",
+            "outputFormatEncoding": "utf-8",
+        }
+
+        temp_df = await a_get_df(url, vars)
+        temp_dfs.append(temp_df)
+
+    df_skupiny = pd.concat(temp_dfs)
+    print(df_skupiny.columns)
+    
+    df_predmety = df_skupiny[["zkratka", "nazev", "garanti", "kreditu", "vyukaZS", "vyukaLS"]]
+    # column semestr ZS if column if vyukaZS == A
+    df_predmety["semestr"] = df_predmety["vyukaZS"].apply(lambda x: "ZS" if x == "A" else "LS")
+    df_predmety["garanti"] = df_predmety["garanti"].str.replace("'", '')
+    df_predmety = df_predmety.drop(columns=["vyukaZS", "vyukaLS"])
+    
+    df_predmety.columns = ["Zkratka", "Název", "Garanti", "Kreditů", "Semestr"]
+
     return templates.TemplateResponse(
         "pages/obor.html",
-        {"request": request, "df_obor": df_obor, "df_skupiny": df_skupiny},
+        {"request": request, "df_obor": df_obor, "df_skupiny": df_skupiny, "df_predmety": df_predmety},
     )
 
 

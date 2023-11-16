@@ -1,6 +1,6 @@
 {% for index, row in df.iterrows() %}
 <div class="box p-5">
-<div id="predmet" class="container is-max-desktop">
+<div id="#{{ row['zkratka'] }}" class="container is-max-desktop">
   <h1 class="title is-medium has-text-centered p-3" id="{{row['nazev']}}">{{row['nazev']}}</h1>
   <table class="table mx-auto">
     <tbody>
