@@ -1,19 +1,33 @@
-<div class="container p-5">
+<div class="container p-5 animate__animated animate__slideInRight animate_fast">
     <div class="columns is-multiline is-centered">
         {% for index, row in df.iterrows() %}
         <div class="column is-6-tablet is-3-desktop is-8-widescreen is-4-fullhd">
-            <div class="card has-background-light is-hoverable">
+            <div class="card has-background-light">
                 <div class="card-content">
                     <div class="title is-5">
                         {{ row['nazev'] }}
                     </div>
                     <div class="subtitle is-6">
-                        {{ row['forma'] }} | {{ row['typ'] }}
+                        {% if row['typ'] == "Bakalářský" %}
+                        <span class="tag is-success">{{ row['typ'] }}</span>
+                        {% elif row['typ'] == "Navazující" %}
+                        <span class="tag is-info">{{ row['typ'] }}</span>
+                        {% endif %}
+
+                        {% if row['forma'] == "Prezenční" %}
+                        <span class="tag is-link">{{ row['forma'] }}</span>
+                        {% elif row['forma'] == "Kombinovaná" %}
+                        <span class="tag is-warning">{{ row['forma'] }}</span>
+                        {% elif row['forma'] == "Distanční" %}
+                        <span class="tag is-danger">{{ row['forma'] }}</span>
+                        {% endif %}
                     </div>
                 </div>
                 <footer class="card-footer">
                     <a href="/ws/obor/{{row['stprIdno']}}" class="card-footer-item">
-                        <i class="material-icons has-text-black">info</i>
+                        <span class="icon is-medium has-text-black">
+                            <span class="mdi mdi-information mdi-24px"></span>
+                          </span>
                     </a>
                 </footer>
             </div>

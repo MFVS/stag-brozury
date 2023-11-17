@@ -1,13 +1,21 @@
 {% extends 'index.html' %}
 {% block body %}
 
+<style>
+  .box {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+</style>
+
 <section class="hero is-medium is-primary">
   <div class="hero-body">
     <div class="container">
-      <h1 class="title">
+      <h1 class="title animate__animated animate__slideInRight">
         {{ df_obor['nazev'][0] }}
       </h1>
-      <h2 class="subtitle">
+      <h2 class="subtitle animate__animated animate__slideInRight">
         {{ df_obor['zkratka'][0] }}
       </h2>
     </div>
@@ -46,7 +54,7 @@
 
   <hr>
 
-  <h1 class="is-size-1 p-3 has-text-centered">Studijní plán</h1>
+  <h2 class="is-size-1 p-3 has-text-centered">Studijní plán</h2>
 
   <table class="table mx-auto">
     <thead>
@@ -55,6 +63,7 @@
         <th>
           <div class="select is-primary">
             <select>
+
               <option>{{ column }}</option>
               {% for value in df_predmety[column].unique() %}
               <option>{{ value }}</option>
@@ -69,9 +78,10 @@
       {% for index, row in df_predmety.iterrows() %}
       <tr>
         {% for column in df_predmety.columns %}
-        {% if column == "nazev" %}
+        {% if column == "Název" %}
         <td>
-          <a href="#{{ row['zkratka'] }}">
+          <a href="#{{ row['Zkratka'] }}"
+          _="on click wait 0.5s then add .animate__shakeX to #{{ row['Zkratka'] }} then wait 1s then remove .animate__shakeX from #{{ row['Zkratka'] }}">
             {{ row[column] }}
           </a>
         {% else %}
@@ -86,68 +96,71 @@
 
   <hr>
 
-  
+<h2 class="is-size-1 p-3 has-text-centered">Přehled předmětů</h2>
 
-  {% for index, row in df_skupiny.iterrows() %}
-  <div class="box p-5">
-  <div id="{{ row['zkratka'] }}" class="container is-max-desktop">
-    <h1 class="title is-medium has-text-centered p-3">{{row['nazev']}}</h1>
-    <table class="table mx-auto">
-      <tbody>
-        <tr>
-          <th>Kód kurzu</th>
-          <td>{{ row['katedra'] }}/{{ row['zkratka'] }}</td>
-        </tr>
-        <tr>
-          <th>Počet kreditů</th>
-          <td>{{ row['kreditu'] }}</td>
-        </tr>
-        <tr>
-          <th>Vyučující</th>
-          <td>
-            {{ (row['prednasejici'] | string).translate({39:None}) }}
-          </td>
-        </tr>
-        <tr>
-          <th>Semestr</th>
-          <td>
-            {% if row['vyukaZS'] == 'A' %}
-            Zimní
-            {% else %}
-            Letní 
-            {% endif %}
-          </td>
-        </tr>
 
-        <tr>
-          <th>Přednášky/cvičení</th>
-          <td>
-            {{ row['jednotekPrednasek']}}/{{ row['jednotekCviceni']
-            }} HOD/TYD
-          </td>
-        </tr>
-        <tr>
-          <th>Zakončení</th>
-          <td>{{ row['typZkousky'] }}</td>
-        </tr>
-        <tr>
-          <td colspan="2">{{ row['anotace'] }}</td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            {{ row['prehledLatky'] | replace("\n", "<br />" | safe ) }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<div class="container p-5">
+  <div class="columns is-multiline is-centered">
+      {% for index, row in df_skupiny.iterrows() %}
+      <div class="column is-6-tablet is-3-desktop is-8-widescreen is-6-fullhd">
+        <div id="{{ row['zkratka'] }}" class="box p-5 animate__animated has-background-light">
+          <div class="container is-max-desktop">
+            <h1 class="title is-medium has-text-centered p-3">{{row['nazev']}}</h1>
+            <table class="table mx-auto has-background-light">
+              <tbody>
+                <tr>
+                  <th>Kód kurzu</th>
+                  <td>{{ row['katedra'] }}/{{ row['zkratka'] }}</td>
+                </tr>
+                <tr>
+                  <th>Počet kreditů</th>
+                  <td>{{ row['kreditu'] }}</td>
+                </tr>
+                <tr>
+                  <th>Vyučující</th>
+                  <td>
+                    {{ (row['prednasejici'] | string).translate({39:None}) }}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Semestr</th>
+                  <td>
+                    {% if row['vyukaZS'] == 'A' %}
+                    Zimní
+                    {% else %}
+                    Letní 
+                    {% endif %}
+                  </td>
+                </tr>
+        
+                <tr>
+                  <th>Přednášky/cvičení</th>
+                  <td>
+                    {{ row['jednotekPrednasek']}}/{{ row['jednotekCviceni']
+                    }} HOD/TYD
+                  </td>
+                </tr>
+                <tr>
+                  <th>Zakončení</th>
+                  <td>{{ row['typZkousky'] }}</td>
+                </tr>
+                <tr>
+                  <td colspan="2">{{ row['anotace'] }}</td>
+                </tr>
+                <!-- <tr>
+                  <td colspan="2">
+                    {{ row['prehledLatky'] | replace("\n", "<br />" | safe ) }}
+                  </td>
+                </tr> -->
+              </tbody>
+            </table>
+          </div>
+          </div>
+      </div>
+      {% endfor %}
   </div>
-  </div>
-{% endfor %}
+</div>
 
-
-  <div id="predmety">
-    
-  </div>
 </div>
 
 {% endblock %}

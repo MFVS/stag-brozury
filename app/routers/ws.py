@@ -115,7 +115,7 @@ async def get_obor(request: Request, obor_idno: int):
     df_predmety = df_skupiny[["zkratka", "nazev", "garanti", "kreditu", "vyukaZS", "vyukaLS"]]
     # column semestr ZS if column if vyukaZS == A
     df_predmety["semestr"] = df_predmety["vyukaZS"].apply(lambda x: "ZS" if x == "A" else "LS")
-    df_predmety["garanti"] = df_predmety["garanti"].str.replace("'", '')
+    df_predmety["garanti"] = df_predmety["garanti"].str.replace("'", "")
     df_predmety = df_predmety.drop(columns=["vyukaZS", "vyukaLS"])
     
     df_predmety.columns = ["Zkratka", "Název", "Garanti", "Kreditů", "Semestr"]
