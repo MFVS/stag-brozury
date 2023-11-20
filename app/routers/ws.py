@@ -1,6 +1,9 @@
 from fastapi import APIRouter, Request, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
+from typing import Any
+from io import StringIO
+import requests
 import pandas as pd
 
 from ..utils import a_get_df
@@ -20,7 +23,10 @@ async def get_programs(
     programme: str = Form(None),
 ):
     study_programme = StudyProgramme(
-        faculty=faculty, study_form=study_form, programme_type=programme_type, programme=programme
+        faculty=faculty,
+        study_form=study_form,
+        programme_type=programme_type,
+        programme=programme,
     )
 
     df = pd.read_csv("df.csv")
@@ -32,8 +38,10 @@ async def get_programs(
     if study_programme.programme_type:
         df = df.loc[df["typ"] == programme_type]
     if study_programme.programme:
-        df = df[df['nazev'].str.contains(study_programme.programme, case=False, na=False)]
-    
+        df = df[
+            df["nazev"].str.contains(study_programme.programme, case=False, na=False)
+        ]
+
     if df.empty:
         html_content = """
             <div class="container has-text-centered">
@@ -59,9 +67,9 @@ async def get_obor(request: Request, obor_idno: int):
         "outputFormatEncoding": "utf-8",
     }
 
-    df_obor = await a_get_df(url, vars)
-    
-    obor_idno = df_obor["oborIdno"][0]
+    df_obor = pd.read_csv(StringIO(requests.get(url, params=vars).text), sep=";")
+
+    obor_idno = df_obor["oborIdno"].iloc[0]
 
     url = "https://ws.ujep.cz/ws/services/rest2/programy/getPlanyOboru"
     vars = {
@@ -71,8 +79,10 @@ async def get_obor(request: Request, obor_idno: int):
         "outputFormatEncoding": "utf-8",
     }
 
-    help_df = await a_get_df(url, vars)
-    stplIdno = help_df["stplIdno"][0]
+    df = pd.read_csv(StringIO(requests.get(url, params=vars).text), sep=";")
+
+    stplIdno = df["stplIdno"][0]
+
     url = "https://ws.ujep.cz/ws/services/rest2/programy/getSegmentyPlanu"
 
     vars = {
@@ -82,11 +92,13 @@ async def get_obor(request: Request, obor_idno: int):
         "outputFormatEncoding": "utf-8",
     }
 
-    df_skupiny = await a_get_df(url, vars)
-
+    df_module = pd.read_csv(StringIO(requests.get(url, params=vars).text), sep=";")
+    df_module
     temp_dfs = []
 
-    for sesp_idno in df_skupiny["sespIdno"]:
+    for sesp_idno, nazev_segmentu in zip(
+        df_module["sespIdno"], df_module["nazevModulu"]
+    ):
         url = "https://ws.ujep.cz/ws/services/rest2/programy/getBlokySegmentu"
         vars = {
             "sespIdno": sesp_idno,
@@ -94,11 +106,82 @@ async def get_obor(request: Request, obor_idno: int):
             "outputFormat": "CSV",
             "outputFormatEncoding": "utf-8",
         }
-        temp_df = await a_get_df(url, vars)
-        blokidno = temp_df["blokIdno"][0]
+        temp_df = pd.read_csv(StringIO(requests.get(url, params=vars).text), sep=";")
+
+        for blokidno, nazev_bloku in zip(temp_df["blokIdno"], temp_df["nazev"]):
+            url = "https://ws.ujep.cz/ws/services/rest2/predmety/getPredmetyByBlokFullInfo"
+
+            vars = {
+                "blokIdno": blokidno,
+                "lang": "cs",
+                "outputFormat": "CSV",
+                "outputFormatEncoding": "utf-8",
+            }
+
+            temp_df = pd.read_csv(
+                StringIO(requests.get(url, params=vars).text), sep=";"
+            )
+            temp_df["nazev_segmentu"] = nazev_segmentu
+            temp_df["nazev_bloku"] = nazev_bloku
+            temp_dfs.append(temp_df)
+
+    df_skupiny = pd.concat(temp_dfs)
+
+    df_skupiny
+    # print(df_skupiny.columns)
+
+    df_predmety = df_skupiny[  # "nazev_segmentu",
+        ["nazev_bloku", "zkratka", "nazev", "garanti", "kreditu", "vyukaZS", "vyukaLS"]
+    ]
+    # column semestr ZS if column if vyukaZS == A
+    df_predmety["semestr"] = df_predmety["vyukaZS"].apply(
+        lambda x: "ZS" if x == "A" else "LS"
+    )
+    df_predmety["garanti"] = df_predmety["garanti"].str.replace("'", "")
+    df_predmety = df_predmety.drop(columns=["vyukaZS", "vyukaLS"])
+
+    df_predmety.columns = ["Blok", "Zkratka", "Název", "Garanti", "Kreditů", "Semestr"]
+    df_predmety_str = df_predmety.to_json(orient="records")
+
+    return templates.TemplateResponse(
+        "pages/obor.html",
+        {
+            "request": request,
+            "df_obor": df_obor,
+            "df_skupiny": df_skupiny,
+            "df_predmety": df_predmety,
+            "df_predmety_str": df_predmety_str,
+        },
+    )
+
+
+@router.post("/predmety")
+async def get_predmety_skupiny(
+    request: Request,
+    shortcut: str = Form(alias="Zkratka"),
+    name: str = Form(alias="Název"),
+    guarantor: str = Form(alias="Garanti"),
+    credits: str = Form(alias="Kreditů"),
+    semester: str = Form(alias="Semestr"),
+    idnos: list = Form(alias="stplIdno"),
+):
+    print(shortcut, name, guarantor, credits, semester, idno)
+
+    dfs = []
+
+    for idno in idnos:
+        url = "https://ws.ujep.cz/ws/services/rest2/programy/getBlokySegmentu"
+        vars = {
+            "sespIdno": idno,
+            "lang": "cs",
+            "outputFormat": "CSV",
+            "outputFormatEncoding": "utf-8",
+        }
+
+        df = await a_get_df(url, vars)
+        blokidno = df["blokIdno"][0]
 
         url = "https://ws.ujep.cz/ws/services/rest2/predmety/getPredmetyByBlokFullInfo"
-        
         vars = {
             "blokIdno": blokidno,
             "lang": "cs",
@@ -106,49 +189,64 @@ async def get_obor(request: Request, obor_idno: int):
             "outputFormatEncoding": "utf-8",
         }
 
-        temp_df = await a_get_df(url, vars)
-        temp_dfs.append(temp_df)
+        df = await a_get_df(url, vars)
+        dfs.append(df)
 
-    df_skupiny = pd.concat(temp_dfs)
-    print(df_skupiny.columns)
-    
-    df_predmety = df_skupiny[["zkratka", "nazev", "garanti", "kreditu", "vyukaZS", "vyukaLS"]]
-    # column semestr ZS if column if vyukaZS == A
-    df_predmety["semestr"] = df_predmety["vyukaZS"].apply(lambda x: "ZS" if x == "A" else "LS")
-    df_predmety["garanti"] = df_predmety["garanti"].str.replace("'", "")
-    df_predmety = df_predmety.drop(columns=["vyukaZS", "vyukaLS"])
-    
-    df_predmety.columns = ["Zkratka", "Název", "Garanti", "Kreditů", "Semestr"]
+    df = pd.concat(dfs)
+
+    print(df.head())
 
     return templates.TemplateResponse(
-        "pages/obor.html",
-        {"request": request, "df_obor": df_obor, "df_skupiny": df_skupiny, "df_predmety": df_predmety},
+        "components/table.html", {"request": request, "df_predmety": df}
     )
 
 
-@router.get("/predmety/{sesp_idno}")
-async def get_predmety_skupiny(request: Request, sesp_idno: int):
-    url = "https://ws.ujep.cz/ws/services/rest2/programy/getBlokySegmentu"
-    vars = {
-        "sespIdno": sesp_idno,
-        "lang": "cs",
-        "outputFormat": "CSV",
-        "outputFormatEncoding": "utf-8",
-    }
+@router.post("/filter")
+def filter_df(
+    request: Request,
+    df: str = Form(alias="df"),
+    bloc: str = Form(alias="Blok"),
+    shortcut: str = Form(alias="Zkratka"),
+    name: str = Form(alias="Název"),
+    guarantor: str = Form(alias="Garanti"),
+    credits: str = Form(alias="Kreditů"),
+    semester: str = Form(alias="Semestr"),
+):
+    if bloc == "Blok":
+        bloc = None
+    if shortcut == "Zkratka":
+        shortcut = None
+    if name == "Název":
+        name = None
+    if guarantor == "Garanti":
+        guarantor = None
+    if credits == "Kreditů":
+        credits = None
+    if semester == "Semestr":
+        semester = None
 
-    df = await a_get_df(url, vars)
-    blokidno = df["blokIdno"][0]
+    df_filter = pd.read_json(df)
 
-    url = "https://ws.ujep.cz/ws/services/rest2/predmety/getPredmetyByBlokFullInfo"
-    vars = {
-        "blokIdno": blokidno,
-        "lang": "cs",
-        "outputFormat": "CSV",
-        "outputFormatEncoding": "utf-8",
-    }
-
-    df = await a_get_df(url, vars)
+    if bloc:
+        df_filter = df_filter.loc[df_filter["Blok"] == bloc]
+    if shortcut:
+        df_filter = df_filter.loc[df_filter["Zkratka"] == shortcut]
+    if name:
+        df_filter = df_filter.loc[df_filter["Název"] == name]
+    if guarantor:
+        df_filter = df_filter.loc[df_filter["Garanti"] == guarantor]
+    if credits:
+        df_filter = df_filter.loc[df_filter["Kreditů"] == credits]
+    if semester:
+        df_filter = df_filter.loc[df_filter["Semestr"] == semester]
+        
 
     return templates.TemplateResponse(
-        "components/predmety.html", {"request": request, "df": df}
+        "components/table.html",
+        {
+            "request": request,
+            "df_predmety": df_filter,
+            "df_predmety_str": df,
+            "df_predmety_full": pd.read_json(df),
+        },
     )

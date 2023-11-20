@@ -12,7 +12,7 @@ class StudyProgramme(BaseModel):
     faculty: str | None
     study_form: str | None  # prezencne atd.
     programme_type: str | None  # bakalar, navazujici atd.
-    programme: str | None # vyhledavani konkretniho predmetu
+    programme: str | None  # vyhledavani konkretniho predmetu
 
     normalize_all = field_validator("*", mode="before")(normalize_all)
 

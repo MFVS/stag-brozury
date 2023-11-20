@@ -56,15 +56,23 @@
 
   <h2 class="is-size-1 p-3 has-text-centered">Studijní plán</h2>
 
+  <div id="table" class="container">
+  <form
+  id="form"
+  hx-post="/ws/filter"
+  hx-indicator="#progress"
+  hx-target="#table"
+  hx-swap="innerHTML">
+  <input type="hidden" name="df" value="{{ df_predmety_str }}">
   <table class="table mx-auto">
     <thead>
       <tr>
         {% for column in df_predmety.columns %}
         <th>
           <div class="select is-primary">
-            <select>
+            <select name="{{ column }}" hx-post="/ws/filter" hx-trigger="change">
 
-              <option>{{ column }}</option>
+              <option selected>{{ column }}</option>
               {% for value in df_predmety[column].unique() %}
               <option>{{ value }}</option>
               {% endfor %}
@@ -93,6 +101,8 @@
     </tbody>
 
   </table>
+</form>
+</div>
 
   <hr>
 
@@ -147,11 +157,11 @@
                 <tr>
                   <td colspan="2">{{ row['anotace'] }}</td>
                 </tr>
-                <!-- <tr>
+                <tr>
                   <td colspan="2">
                     {{ row['prehledLatky'] | replace("\n", "<br />" | safe ) }}
                   </td>
-                </tr> -->
+                </tr>
               </tbody>
             </table>
           </div>

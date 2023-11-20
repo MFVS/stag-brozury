@@ -1,0 +1,38 @@
+<input type="hidden" name="df" value="{{ df_predmety_str }}">
+<table id="table" class="table mx-auto">
+    <thead>
+      <tr>
+        {% for column in df_predmety_full.columns %}
+        <th>
+          <div class="select is-primary">
+            <select name="{{ column }}" hx-post="/ws/filter" hx-trigger="change">
+
+              <option>{{ column }}</option>
+              {% for value in df_predmety_full[column].unique() %}
+              <option>{{ value }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for index, row in df_predmety.iterrows() %}
+      <tr>
+        {% for column in df_predmety.columns %}
+        {% if column == "Název" %}
+        <td>
+          <a href="#{{ row['Zkratka'] }}"
+          _="on click wait 0.5s then add .animate__shakeX to #{{ row['Zkratka'] }} then wait 1s then remove .animate__shakeX from #{{ row['Zkratka'] }}">
+            {{ row[column] }}
+          </a>
+        {% else %}
+        <td>{{ row[column] }}</td>
+        {% endif %}
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+
+  </table>
