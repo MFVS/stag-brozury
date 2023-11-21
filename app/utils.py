@@ -24,3 +24,15 @@ async def a_get_df(url: str, vars: dict) -> pd.DataFrame:
         return None
 
     return df
+
+def get_df(url: str, vars: dict) -> pd.DataFrame:
+    request = httpx.Client().get(
+        url,
+        params=vars,
+    )
+    response = request
+    df = pd.read_csv(StringIO(response.text), sep=";")
+    if df.empty:
+        return None
+
+    return df
