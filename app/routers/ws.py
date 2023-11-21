@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Request, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
-from typing import Any
 from io import StringIO
 import requests
 import pandas as pd
@@ -44,7 +43,7 @@ async def get_programs(
 
     if df.empty:
         html_content = """
-            <div class="container has-text-centered">
+            <div class="container has-text-centered animate__animated animate__fadeIn animate_slower">
             <div class="notification is-warning">
                 Nebyl nalezen žádný studijní program, který by odpovídal paramterům vyhledávání.
             </div>
@@ -193,8 +192,7 @@ async def get_predmety_skupiny(
         dfs.append(df)
 
     df = pd.concat(dfs)
-
-    print(df.head())
+    # print(df.head())
 
     return templates.TemplateResponse(
         "components/table.html", {"request": request, "df_predmety": df}
@@ -205,15 +203,15 @@ async def get_predmety_skupiny(
 def filter_df(
     request: Request,
     df: str = Form(alias="df"),
-    bloc: str = Form(alias="Blok"),
+    block: str = Form(alias="Blok"),
     shortcut: str = Form(alias="Zkratka"),
     name: str = Form(alias="Název"),
     guarantor: str = Form(alias="Garanti"),
-    credits: str = Form(alias="Kreditů"),
+    credits: int = Form(alias="Kreditů"),
     semester: str = Form(alias="Semestr"),
 ):
-    if bloc == "Blok":
-        bloc = None
+    if block == "Blok":
+        block = None
     if shortcut == "Zkratka":
         shortcut = None
     if name == "Název":
@@ -225,10 +223,10 @@ def filter_df(
     if semester == "Semestr":
         semester = None
 
-    df_filter = pd.read_json(df)
+    df_filter = pd.read_json(StringIO(df))
 
-    if bloc:
-        df_filter = df_filter.loc[df_filter["Blok"] == bloc]
+    if block:
+        df_filter = df_filter.loc[df_filter["Blok"] == block]
     if shortcut:
         df_filter = df_filter.loc[df_filter["Zkratka"] == shortcut]
     if name:
@@ -239,7 +237,6 @@ def filter_df(
         df_filter = df_filter.loc[df_filter["Kreditů"] == credits]
     if semester:
         df_filter = df_filter.loc[df_filter["Semestr"] == semester]
-        
 
     return templates.TemplateResponse(
         "components/table.html",
@@ -247,6 +244,6 @@ def filter_df(
             "request": request,
             "df_predmety": df_filter,
             "df_predmety_str": df,
-            "df_predmety_full": pd.read_json(df),
+            "df_predmety_full": pd.read_json(StringIO(df)),
         },
     )

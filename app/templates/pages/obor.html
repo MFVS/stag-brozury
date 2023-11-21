@@ -70,9 +70,9 @@
         {% for column in df_predmety.columns %}
         <th>
           <div class="select is-primary">
-            <select name="{{ column }}" hx-post="/ws/filter" hx-trigger="change">
+            <select name="{{ column }}" hx-post="/ws/filter" hx-trigger="change" hx-target="#table" hx-swap="innerHTML">
 
-              <option selected>{{ column }}</option>
+              <option>{{ column }}</option>
               {% for value in df_predmety[column].unique() %}
               <option>{{ value }}</option>
               {% endfor %}

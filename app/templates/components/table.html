@@ -1,3 +1,9 @@
+<form
+  id="form"
+  hx-post="/ws/filter"
+  hx-indicator="#progress"
+  hx-target="#table"
+  hx-swap="innerHTML">
 <input type="hidden" name="df" value="{{ df_predmety_str }}">
 <table id="table" class="table mx-auto">
     <thead>
@@ -5,7 +11,7 @@
         {% for column in df_predmety_full.columns %}
         <th>
           <div class="select is-primary">
-            <select name="{{ column }}" hx-post="/ws/filter" hx-trigger="change">
+            <select name="{{ column }}" hx-post="/ws/filter" hx-trigger="change" hx-target="#table" hx-swap="innerHTML">
 
               <option>{{ column }}</option>
               {% for value in df_predmety_full[column].unique() %}
@@ -36,3 +42,4 @@
     </tbody>
 
   </table>
+</form>

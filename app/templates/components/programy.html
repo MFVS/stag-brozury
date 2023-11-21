@@ -11,20 +11,22 @@
                         {% if row['typ'] == "Bakalářský" %}
                         <span class="tag is-success">{{ row['typ'] }}</span>
                         {% elif row['typ'] == "Navazující" %}
-                        <span class="tag is-info">{{ row['typ'] }}</span>
+                        <span class="tag is-warning">{{ row['typ'] }}</span>
+                        {% elif row['typ'] == "Doktorský" %}
+                        <span class="tag is-danger">{{ row['typ'] }}</span>
                         {% endif %}
 
                         {% if row['forma'] == "Prezenční" %}
                         <span class="tag is-link">{{ row['forma'] }}</span>
                         {% elif row['forma'] == "Kombinovaná" %}
-                        <span class="tag is-warning">{{ row['forma'] }}</span>
+                        <span class="tag is-info">{{ row['forma'] }}</span>
                         {% elif row['forma'] == "Distanční" %}
                         <span class="tag is-danger">{{ row['forma'] }}</span>
                         {% endif %}
                     </div>
                 </div>
                 <footer class="card-footer">
-                    <a href="/ws/obor/{{row['stprIdno']}}" class="card-footer-item">
+                    <a href="/ws/obor/{{row['stprIdno']}}" hx-indicator="#progress" class="card-footer-item">
                         <span class="icon is-medium has-text-black">
                             <span class="mdi mdi-information mdi-24px"></span>
                           </span>
