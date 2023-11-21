@@ -8,21 +8,23 @@
                         {{ row['nazev'] }}
                     </div>
                     <div class="subtitle is-6">
-                        {% if row['typ'] == "Bakalářský" %}
-                        <span class="tag is-success">{{ row['typ'] }}</span>
-                        {% elif row['typ'] == "Navazující" %}
-                        <span class="tag is-warning">{{ row['typ'] }}</span>
-                        {% elif row['typ'] == "Doktorský" %}
-                        <span class="tag is-danger">{{ row['typ'] }}</span>
-                        {% endif %}
-
-                        {% if row['forma'] == "Prezenční" %}
-                        <span class="tag is-link">{{ row['forma'] }}</span>
-                        {% elif row['forma'] == "Kombinovaná" %}
-                        <span class="tag is-info">{{ row['forma'] }}</span>
-                        {% elif row['forma'] == "Distanční" %}
-                        <span class="tag is-danger">{{ row['forma'] }}</span>
-                        {% endif %}
+                        <div class="tags has-addons">
+                            {% if row['typ'] == "Bakalářský" %}
+                            <span class="tag is-success">{{ row['typ'] }}</span>
+                            {% elif row['typ'] == "Navazující" %}
+                            <span class="tag is-warning">{{ row['typ'] }}</span>
+                            {% elif row['typ'] == "Doktorský" %}
+                            <span class="tag is-danger">{{ row['typ'] }}</span>
+                            {% endif %}
+                            
+                            {% if row['forma'] == "Prezenční" %}
+                            <span class="tag is-link">{{ row['forma'] }}</span>
+                            {% elif row['forma'] == "Kombinovaná" %}
+                            <span class="tag is-info">{{ row['forma'] }}</span>
+                            {% elif row['forma'] == "Distanční" %}
+                            <span class="tag is-danger">{{ row['forma'] }}</span>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
                 <footer class="card-footer">
