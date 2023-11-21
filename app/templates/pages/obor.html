@@ -56,15 +56,22 @@
 
   <h2 class="is-size-1 p-3 has-text-centered">Studijní plán</h2>
 
-  <div id="table" class="container">
   <form
   id="form"
   hx-post="/ws/filter"
   hx-indicator="#progress"
-  hx-target="#table"
-  hx-swap="innerHTML">
+  hx-target="#table">
   <input type="hidden" name="df" value="{{ df_predmety_str }}">
   <table class="table mx-auto is-hoverable">
+    <thead>
+      <tr>
+        {% for column in df_predmety.columns %}
+        <th>
+          {{ column }}
+        </th>
+        {% endfor %}
+      </tr>
+    </thead>
     <thead>
       <tr>
         {% for column in df_predmety.columns %}
@@ -72,7 +79,7 @@
           <div class="select is-primary">
             <select name="{{ column }}" hx-post="/ws/filter" hx-trigger="change" hx-target="#table" hx-swap="innerHTML">
 
-              <option>{{ column }}</option>
+              <option>Vše</option>
               {% for value in df_predmety[column].unique() %}
               <option>{{ value }}</option>
               {% endfor %}
@@ -82,14 +89,13 @@
         {% endfor %}
       </tr>
     </thead>
-    <tbody>
+    <tbody id="table">
       {% for index, row in df_predmety.iterrows() %}
       <tr>
         {% for column in df_predmety.columns %}
         {% if column == "Název" %}
         <td>
-          <a href="#{{ row['Zkratka'] }}"
-          _="on click wait 0.5s then add .animate__shakeX to #{{ row['Zkratka'] }} then wait 1s then remove .animate__shakeX from #{{ row['Zkratka'] }}">
+          <a href="#{{ row['Zkratka'] }}">
             {{ row[column] }}
           </a>
         {% else %}
@@ -102,7 +108,6 @@
 
   </table>
 </form>
-</div>
 
   <hr>
 
@@ -110,9 +115,7 @@
 
 
 <div class="container p-5">
-  <div class="columns is-multiline is-centered">
       {% for index, row in df_skupiny.iterrows() %}
-      <div class="column is-6-tablet is-3-desktop is-8-widescreen is-6-fullhd">
         <div id="{{ row['zkratka'] }}" class="box p-5 animate__animated has-background-light">
           <div class="container is-max-desktop">
             <h1 class="title is-medium has-text-centered p-3">{{row['nazev']}}</h1>
@@ -166,9 +169,7 @@
             </table>
           </div>
           </div>
-      </div>
       {% endfor %}
-  </div>
 </div>
 
 </div>

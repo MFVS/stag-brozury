@@ -204,30 +204,31 @@ def filter_df(
     name: str = Form(alias="Název"),
     guarantor: str = Form(alias="Garanti"),
     credits: Any = Form(alias="Kreditů"),
-    semester: str = Form(alias="Semestr"),
+    term: str = Form(alias="Semestr"),
 ):
     subject = Subject(
+        block=block,
         shortcut=shortcut,
         name=name,
         guarantor=guarantor,
         credits=credits,
-        semester=semester,
+        term=term,
     )
-
+    
     df_filter = pd.read_json(StringIO(df))
 
-    if block:
-        df_filter = df_filter.loc[df_filter["Blok"] == block]
-    if shortcut:
-        df_filter = df_filter.loc[df_filter["Zkratka"] == shortcut]
-    if name:
-        df_filter = df_filter.loc[df_filter["Název"] == name]
-    if guarantor:
-        df_filter = df_filter.loc[df_filter["Garanti"] == guarantor]
-    if credits:
-        df_filter = df_filter.loc[df_filter["Kreditů"] == credits]
-    if semester:
-        df_filter = df_filter.loc[df_filter["Semestr"] == semester]
+    if subject.block:
+        df_filter = df_filter.loc[df_filter["Blok"] == subject.block]
+    if subject.shortcut:
+        df_filter = df_filter.loc[df_filter["Zkratka"] == subject.shortcut]
+    if subject.name:
+        df_filter = df_filter.loc[df_filter["Název"] == subject.name]
+    if subject.guarantor:
+        df_filter = df_filter.loc[df_filter["Garanti"] == subject.guarantor]
+    if subject.credits:
+        df_filter = df_filter.loc[df_filter["Kreditů"] == subject.credits]
+    if subject.term:
+        df_filter = df_filter.loc[df_filter["Semestr"] == subject.term]
 
     return templates.TemplateResponse(
         "components/table.html",

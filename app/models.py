@@ -35,15 +35,18 @@ class StudyProgramme(BaseModel):
     
 
 class Subject(BaseModel):
+    block: str | None
     shortcut: str | None
     name: str | None
     guarantor: str | None
     credits: int | None
-    semester: str | None
+    term: str | None
 
     normalize_all = field_validator("*", mode="before")(normalize_all)
     
     @field_validator("credits", mode="before")
     def str_none(cls, v):
-        if isinstance(v, str):
+        try:
+            return int(v)
+        except:
             return None
