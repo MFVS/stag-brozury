@@ -2,11 +2,13 @@ from fastapi import APIRouter, Request, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from io import StringIO
+from typing import Any
+from unidecode import unidecode
 import requests
 import pandas as pd
 
 from ..utils import a_get_df
-from ..models import StudyProgramme
+from ..models import StudyProgramme, Subject
 
 router = APIRouter(prefix="/ws", tags=["WS"])
 
@@ -31,14 +33,14 @@ async def get_programs(
     df = pd.read_csv("df.csv")
 
     if study_programme.faculty:
-        df = df.loc[df["fakulta"] == faculty]
+        df = df.loc[df["fakulta"] == study_programme.faculty]
     if study_programme.study_form:
-        df = df.loc[df["forma"] == study_form]
+        df = df.loc[df["forma"] == study_programme.study_form]
     if study_programme.programme_type:
-        df = df.loc[df["typ"] == programme_type]
+        df = df.loc[df["typ"] == study_programme.programme_type]
     if study_programme.programme:
         df = df[
-            df["nazev"].str.contains(study_programme.programme, case=False, na=False)
+            df["nazev"].apply(unidecode).str.contains(study_programme.programme, case=False, na=False)
         ]
 
     if df.empty:
@@ -157,15 +159,9 @@ async def get_obor(request: Request, obor_idno: int):
 @router.post("/predmety")
 async def get_predmety_skupiny(
     request: Request,
-    shortcut: str = Form(alias="Zkratka"),
-    name: str = Form(alias="Název"),
-    guarantor: str = Form(alias="Garanti"),
-    credits: str = Form(alias="Kreditů"),
-    semester: str = Form(alias="Semestr"),
     idnos: list = Form(alias="stplIdno"),
 ):
-    print(shortcut, name, guarantor, credits, semester, idno)
-
+    
     dfs = []
 
     for idno in idnos:
@@ -207,21 +203,16 @@ def filter_df(
     shortcut: str = Form(alias="Zkratka"),
     name: str = Form(alias="Název"),
     guarantor: str = Form(alias="Garanti"),
-    credits: str = Form(alias="Kreditů"),
+    credits: Any = Form(alias="Kreditů"),
     semester: str = Form(alias="Semestr"),
 ):
-    if block == "Blok":
-        block = None
-    if shortcut == "Zkratka":
-        shortcut = None
-    if name == "Název":
-        name = None
-    if guarantor == "Garanti":
-        guarantor = None
-    if credits == "Kreditů":
-        credits = None
-    if semester == "Semestr":
-        semester = None
+    subject = Subject(
+        shortcut=shortcut,
+        name=name,
+        guarantor=guarantor,
+        credits=credits,
+        semester=semester,
+    )
 
     df_filter = pd.read_json(StringIO(df))
 

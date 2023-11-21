@@ -1,5 +1,7 @@
 from pydantic import BaseModel, field_validator
 from typing import Any
+from fastapi import Form
+from unidecode import unidecode
 
 
 def normalize_all(value: str) -> Any | None:
@@ -25,3 +27,23 @@ class StudyProgramme(BaseModel):
         }
 
         return vals_dict.get(v)
+    
+    @field_validator("programme")
+    def uni(cls, v):
+        if v:
+            return unidecode(v)
+    
+
+class Subject(BaseModel):
+    shortcut: str | None
+    name: str | None
+    guarantor: str | None
+    credits: int | None
+    semester: str | None
+
+    normalize_all = field_validator("*", mode="before")(normalize_all)
+    
+    @field_validator("credits", mode="before")
+    def str_none(cls, v):
+        if isinstance(v, str):
+            return None
