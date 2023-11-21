@@ -207,7 +207,7 @@ def filter_df(
     shortcut: str = Form(alias="Zkratka"),
     name: str = Form(alias="Název"),
     guarantor: str = Form(alias="Garanti"),
-    credits: int = Form(alias="Kreditů"),
+    credits: str = Form(alias="Kreditů"),
     semester: str = Form(alias="Semestr"),
 ):
     if block == "Blok":
