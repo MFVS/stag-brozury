@@ -132,7 +132,7 @@ async def get_obor(request: Request, obor_idno: int):
     # print(df_skupiny.columns)
 
     df_predmety = df_skupiny[  # "nazev_segmentu",
-        ["nazev_bloku", "zkratka", "nazev", "garanti", "kreditu", "vyukaZS", "vyukaLS"]
+        ["nazev_bloku", "katedra", "zkratka", "nazev", "garanti", "kreditu", "vyukaZS", "vyukaLS", "doporucenyRocnik"]
     ]
     # column semestr ZS if column if vyukaZS == A
     df_predmety["semestr"] = df_predmety["vyukaZS"].apply(
@@ -141,7 +141,7 @@ async def get_obor(request: Request, obor_idno: int):
     df_predmety["garanti"] = df_predmety["garanti"].str.replace("'", "")
     df_predmety = df_predmety.drop(columns=["vyukaZS", "vyukaLS"])
 
-    df_predmety.columns = ["Blok", "Zkratka", "Název", "Garanti", "Kreditů", "Semestr"]
+    df_predmety.columns = ["Blok", "Katedra", "Zkratka", "Název", "Garanti", "Kreditů", "Rok", "Semestr"]
     df_predmety_str = df_predmety.to_json(orient="records")
 
     return templates.TemplateResponse(
@@ -156,62 +156,43 @@ async def get_obor(request: Request, obor_idno: int):
     )
 
 
-@router.post("/predmety")
-async def get_predmety_skupiny(
-    request: Request,
-    idnos: list = Form(alias="stplIdno"),
-):
-    
-    dfs = []
+@router.get("/predmet/{predmet_zkr}/{katedra}")
+def get_predmet(request: Request, predmet_zkr: str):
+    url = "https://ws.ujep.cz/ws/services/rest2/predmety/getPredmetInfo?zkratka=APR1&outputFormat=XLSX&katedra=KI"
+    vars = {
+        "zkratka": predmet_zkr,
+        "lang": "cs",
+        "outputFormat": "CSV",
+        "outputFormatEncoding": "utf-8",
+    }
 
-    for idno in idnos:
-        url = "https://ws.ujep.cz/ws/services/rest2/programy/getBlokySegmentu"
-        vars = {
-            "sespIdno": idno,
-            "lang": "cs",
-            "outputFormat": "CSV",
-            "outputFormatEncoding": "utf-8",
-        }
-
-        df = await a_get_df(url, vars)
-        blokidno = df["blokIdno"][0]
-
-        url = "https://ws.ujep.cz/ws/services/rest2/predmety/getPredmetyByBlokFullInfo"
-        vars = {
-            "blokIdno": blokidno,
-            "lang": "cs",
-            "outputFormat": "CSV",
-            "outputFormatEncoding": "utf-8",
-        }
-
-        df = await a_get_df(url, vars)
-        dfs.append(df)
-
-    df = pd.concat(dfs)
-    # print(df.head())
+    df = pd.read_csv(StringIO(requests.get(url, params=vars).text), sep=";")
 
     return templates.TemplateResponse(
-        "components/table.html", {"request": request, "df_predmety": df}
+        "pages/predmet.html", {"request": request, "df": df}
     )
-
 
 @router.post("/filter")
 def filter_df(
     request: Request,
     df: str = Form(alias="df"),
     block: str = Form(alias="Blok"),
-    shortcut: str = Form(alias="Zkratka"),
-    name: str = Form(alias="Název"),
+    department: str = Form(alias="Katedra"),
+    shortcut: str = Form(None, alias="Zkratka"),
+    name: str = Form(None, alias="Název"),
     guarantor: str = Form(alias="Garanti"),
     credits: Any = Form(alias="Kreditů"),
+    year: Any = Form(alias="Rok"),
     term: str = Form(alias="Semestr"),
 ):
     subject = Subject(
         block=block,
+        department=department,
         shortcut=shortcut,
         name=name,
         guarantor=guarantor,
         credits=credits,
+        year=year,
         term=term,
     )
     
@@ -219,14 +200,24 @@ def filter_df(
 
     if subject.block:
         df_filter = df_filter.loc[df_filter["Blok"] == subject.block]
+    if subject.department:
+        df_filter = df_filter.loc[df_filter["Katedra"] == subject.department]
     if subject.shortcut:
-        df_filter = df_filter.loc[df_filter["Zkratka"] == subject.shortcut]
+        # df_filter = df_filter.loc[df_filter["Zkratka"] == subject.shortcut]
+        df_filter = df_filter[
+            df_filter["Zkratka"].apply(unidecode).str.contains(subject.shortcut, case=False, na=False)
+        ]
     if subject.name:
-        df_filter = df_filter.loc[df_filter["Název"] == subject.name]
+        # df_filter = df_filter.loc[df_filter["Název"] == subject.name]
+        df_filter = df_filter[
+            df_filter["Název"].apply(unidecode).str.contains(subject.name, case=False, na=False)
+        ]
     if subject.guarantor:
         df_filter = df_filter.loc[df_filter["Garanti"] == subject.guarantor]
     if subject.credits:
         df_filter = df_filter.loc[df_filter["Kreditů"] == subject.credits]
+    if subject.year:
+        df_filter = df_filter.loc[df_filter["Rok"] == subject.year]
     if subject.term:
         df_filter = df_filter.loc[df_filter["Semestr"] == subject.term]
 

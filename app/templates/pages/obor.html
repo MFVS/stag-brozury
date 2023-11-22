@@ -62,7 +62,7 @@
   hx-indicator="#progress"
   hx-target="#table">
   <input type="hidden" name="df" value="{{ df_predmety_str }}">
-  <table class="table mx-auto is-hoverable">
+  <table class="table is-hoverable">
     <thead>
       <tr>
         {% for column in df_predmety.columns %}
@@ -74,19 +74,80 @@
     </thead>
     <thead>
       <tr>
-        {% for column in df_predmety.columns %}
         <th>
-          <div class="select is-primary">
-            <select name="{{ column }}" hx-post="/ws/filter" hx-trigger="change" hx-target="#table" hx-swap="innerHTML">
+          <div class="select is-primary is-rounded">
+            <select name="Blok" hx-post="/ws/filter" hx-trigger="change" hx-target="#table" hx-swap="innerHTML">
 
               <option>Vše</option>
-              {% for value in df_predmety[column].unique() %}
+              {% for value in df_predmety["Blok"].unique() %}
               <option>{{ value }}</option>
               {% endfor %}
             </select>
           </div>
         </th>
-        {% endfor %}
+        <th>
+          <div class="select is-primary is-rounded">
+            <select name="Katedra" hx-post="/ws/filter" hx-trigger="change" hx-target="#table" hx-swap="innerHTML">
+
+              <option>Vše</option>
+              {% for value in df_predmety["Katedra"].unique() %}
+              <option>{{ value }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </th>
+        <th>
+          <div class="field">
+            <input class="input is-primary is-rounded" type="text" placeholder="Vyhledávání" name="Zkratka" value=""
+            hx-post="/ws/filter" hx-trigger="change" hx-target="#table" hx-swap="innerHTML">
+          </div>
+        </th>
+        <th>
+          <div class="field">
+            <input class="input is-primary is-rounded" type="text" placeholder="Vyhledávání" name="Název" value=""
+            hx-post="/ws/filter" hx-trigger="change" hx-target="#table" hx-swap="innerHTML">
+          </div>
+        </th>
+        <th>
+          <div class="select is-primary is-rounded">
+            <select name="Garanti" hx-post="/ws/filter" hx-trigger="change" hx-target="#table" hx-swap="innerHTML">
+              <option>Vše</option>
+              {% for value in df_predmety["Garanti"].unique() %}
+              <option>{{ value }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </th>
+        <th>
+          <div class="select is-primary is-rounded">
+            <select name="Kreditů" hx-post="/ws/filter" hx-trigger="change" hx-target="#table" hx-swap="innerHTML">
+              <option>Vše</option>
+              {% for value in df_predmety["Kreditů"].unique() %}
+              <option>{{ value }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </th>
+        <th>
+          <div class="select is-primary is-rounded">
+            <select name="Rok" hx-post="/ws/filter" hx-trigger="change" hx-target="#table" hx-swap="innerHTML">
+              <option>Vše</option>
+              {% for value in df_predmety["Rok"].unique() %}
+              <option>{{ value }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </th>
+        <th>
+          <div class="select is-primary is-rounded">
+            <select name="Semestr" hx-post="/ws/filter" hx-trigger="change" hx-target="#table" hx-swap="innerHTML">
+              <option>Vše</option>
+              {% for value in df_predmety["Semestr"].unique() %}
+              <option>{{ value }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </th>
       </tr>
     </thead>
     <tbody id="table">

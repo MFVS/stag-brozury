@@ -36,10 +36,12 @@ class StudyProgramme(BaseModel):
 
 class Subject(BaseModel):
     block: str | None
+    department: str | None
     shortcut: str | None
     name: str | None
     guarantor: str | None
     credits: int | None
+    year: int | None
     term: str | None
 
     normalize_all = field_validator("*", mode="before")(normalize_all)
@@ -50,3 +52,8 @@ class Subject(BaseModel):
             return int(v)
         except:
             return None
+    
+    @field_validator("shortcut", "name")
+    def uni(cls, v):
+        if v:
+            return unidecode(v)
