@@ -1,14 +1,7 @@
   {% for index, row in df_predmety.iterrows() %}
-  <tr>
+  <tr _="on click go to the middle of #{{ row['Zkratka'] }}">
     {% for column in df_predmety.columns %}
-    {% if column == "Název" %}
-    <td>
-      <a href="#{{ row['Zkratka'] }}">
-        {{ row[column] }}
-      </a>
-    {% else %}
     <td>{{ row[column] }}</td>
-    {% endif %}
     {% endfor %}
   </tr>
   {% endfor %}

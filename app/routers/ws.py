@@ -46,7 +46,7 @@ async def get_programs(
     if df.empty:
         html_content = """
             <div class="container has-text-centered animate__animated animate__fadeIn animate_slower">
-            <div class="notification is-warning">
+            <div class="notification is-light">
                 Nebyl nalezen žádný studijní program, který by odpovídal paramterům vyhledávání.
             </div>
             </div>
