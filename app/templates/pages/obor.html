@@ -54,6 +54,10 @@
 
   <hr>
 
+</div>
+
+
+
   <h2 class="is-size-1 p-3 has-text-centered">Studijní plán</h2>
 
   <form
@@ -62,11 +66,11 @@
   hx-indicator="#progress"
   hx-target="#table">
   <input type="hidden" name="df" value="{{ df_predmety_str }}">
-  <table class="table is-hoverable">
+  <table class="table is-hoverable mx-auto">
     <thead>
       <tr>
         {% for column in df_predmety.columns %}
-        <th>
+        <th class="has-text-centered">
           {{ column }}
         </th>
         {% endfor %}
@@ -98,14 +102,24 @@
         </th>
         <th>
           <div class="field">
-            <input class="input is-primary is-rounded" type="text" placeholder="Vyhledávání" name="Zkratka" value=""
-            hx-post="/ws/filter" hx-trigger="change" hx-target="#table" hx-swap="innerHTML">
+            <p class="control has-icons-left">
+              <input class="input is-primary is-rounded" type="text" name="Zkratka" value=""
+              hx-post="/ws/filter" hx-trigger="change" hx-target="#table" hx-swap="innerHTML">
+              <span class="icon is-medium is-left">
+                <i class="mdi mdi-magnify"></i>
+              </span>
+            </p>
           </div>
         </th>
         <th>
           <div class="field">
-            <input class="input is-primary is-rounded" type="text" placeholder="Vyhledávání" name="Název" value=""
+            <p class="control has-icons-left">
+            <input class="input is-primary is-rounded" type="text" name="Název" value=""
             hx-post="/ws/filter" hx-trigger="change" hx-target="#table" hx-swap="innerHTML">
+            <span class="icon is-medium is-left">
+                <i class="mdi mdi-magnify"></i>
+              </span>
+            </p>
           </div>
         </th>
         <th>
@@ -154,7 +168,11 @@
       {% for index, row in df_predmety.iterrows() %}
       <tr _="on click go to the middle of #{{ row['Zkratka'] }}">
         {% for column in df_predmety.columns %}
+        {% if column in ['Rok', 'Kreditů', 'Semestr'] %}
+        <td class="has-text-centered">{{ row[column] }}</td>
+        {% else %}
         <td>{{ row[column] }}</td>
+        {% endif %}
         {% endfor %}
       </tr>
       {% endfor %}
@@ -163,10 +181,9 @@
   </table>
 </form>
 
-  <hr>
+<hr>
 
 <h2 class="is-size-1 p-3 has-text-centered">Přehled předmětů</h2>
-
 
 <div class="container p-5">
       {% for index, row in df_skupiny.iterrows() %}
@@ -226,6 +243,5 @@
       {% endfor %}
 </div>
 
-</div>
 
 {% endblock %}

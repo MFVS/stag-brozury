@@ -142,6 +142,8 @@ async def get_obor(request: Request, obor_idno: int):
     df_predmety = df_predmety.drop(columns=["vyukaZS", "vyukaLS"])
 
     df_predmety.columns = ["Blok", "Katedra", "Zkratka", "Název", "Garanti", "Kreditů", "Rok", "Semestr"]
+    df_predmety.fillna("—", inplace=True)
+    df_predmety["Rok"] = df_predmety["Rok"].apply(lambda x: int(x) if x != "—" else x)
     df_predmety_str = df_predmety.to_json(orient="records")
 
     return templates.TemplateResponse(
