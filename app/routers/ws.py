@@ -7,7 +7,7 @@ from unidecode import unidecode
 import requests
 import pandas as pd
 
-from ..utils import a_get_df
+from ..utils import a_get_df, fetch_all_data
 from ..models import StudyProgramme, Subject
 
 router = APIRouter(prefix="/ws", tags=["WS"])
@@ -159,10 +159,11 @@ async def get_obor(request: Request, obor_idno: int):
 
 
 @router.get("/predmet/{predmet_zkr}/{katedra}")
-def get_predmet(request: Request, predmet_zkr: str):
-    url = "https://ws.ujep.cz/ws/services/rest2/predmety/getPredmetInfo?zkratka=APR1&outputFormat=XLSX&katedra=KI"
+def get_predmet(request: Request, predmet_zkr: str, katedra: str):
+    url = "https://ws.ujep.cz/ws/services/rest2/predmety/getPredmetInfo"
     vars = {
         "zkratka": predmet_zkr,
+        "katedra": katedra,
         "lang": "cs",
         "outputFormat": "CSV",
         "outputFormatEncoding": "utf-8",
@@ -171,7 +172,7 @@ def get_predmet(request: Request, predmet_zkr: str):
     df = pd.read_csv(StringIO(requests.get(url, params=vars).text), sep=";")
 
     return templates.TemplateResponse(
-        "pages/predmet.html", {"request": request, "df": df}
+        "components/predmet_modal.html", {"request": request, "df": df}
     )
 
 @router.post("/filter")

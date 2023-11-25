@@ -1,5 +1,5 @@
   {% for index, row in df_predmety.iterrows() %}
-  <tr _="on click go to the middle of #{{ row['Zkratka'] }}">
+  <tr _="on click fetch /ws/predmet/{{ row['Zkratka'] }}/{{ row['Katedra'] }} put the result after me">
     {% for column in df_predmety.columns %}
     <td>{{ row[column] }}</td>
     {% endfor %}

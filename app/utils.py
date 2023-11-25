@@ -3,6 +3,7 @@ import pandas as pd
 import httpx
 from io import StringIO
 import time
+import asyncio
 
 
 def get_tituly(titul_pred: str, titul_za: str, jmeno: str) -> str:
@@ -24,6 +25,11 @@ async def a_get_df(url: str, vars: dict) -> pd.DataFrame:
         return None
 
     return df
+
+async def fetch_all_data(urls, vars):
+    tasks = [a_get_df(url, vars) for url in urls]
+    return await asyncio.gather(*tasks)
+
 
 def get_df(url: str, vars: dict) -> pd.DataFrame:
     request = httpx.Client().get(

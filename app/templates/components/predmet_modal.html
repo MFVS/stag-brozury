@@ -1,0 +1,61 @@
+<div id="modal" class="modal is-active">
+    <div class="modal-background" _="on click remove #modal"></div>
+    <div class="modal-content animate__animated animate__zoomIn animate__faster">
+        <div class="container">
+        <div class="box has-background-light">
+                <h1 class="title is-medium has-text-centered p-3">{{df['nazev'][0]}}</h1>
+                <table class="table mx-auto p-5 has-background-light">
+                <tbody>
+                    <tr>
+                    <th>Kód kurzu</th>
+                    <td>{{ df['katedra'][0] }}/{{ df['zkratka'][0] }}</td>
+                    </tr>
+                    <tr>
+                    <th>Počet kreditů</th>
+                    <td>{{ df['kreditu'][0] }}</td>
+                    </tr>
+                    <tr>
+                    <th>Vyučující</th>
+                    <td>
+                        {{ (df['prednasejici'][0] | string).translate({39:None}) }}
+                    </td>
+                    </tr>
+                    <tr>
+                    <th>Semestr</th>
+                    <td>
+                        {% if df['vyukaZS'][0] == 'A' %}
+                        Zimní
+                        {% else %}
+                        Letní 
+                        {% endif %}
+                    </td>
+                    </tr>
+            
+                    <tr>
+                    <th>Přednášky/cvičení</th>
+                    <td>
+                        {{ df['jednotekPrednasek'][0]}}/{{ df['jednotekCviceni'][0]
+                        }} HOD/TYD
+                    </td>
+                    </tr>
+                    <tr>
+                    <th>Zakončení</th>
+                    <td>{{ df['typZkousky'][0] }}</td>
+                    </tr>
+                    <tr>
+                    <td colspan="2">{{ df['anotace'][0] }}</td>
+                    </tr>
+                    <tr>
+                    <td colspan="2">
+                        {{ df['prehledLatky'][0] | replace("\n", "<br />" | safe ) }}
+                    </td>
+                    </tr>
+                </tbody>
+                </table>
+        </div>
+        </div>
+
+    </div>
+
+
+</div>
