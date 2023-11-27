@@ -2,6 +2,7 @@
     <div class="columns is-multiline is-centered">
         {% for index, row in df.iterrows() %}
         <div class="column is-6-tablet is-3-desktop is-8-widescreen is-4-fullhd">
+            <a href="/ws/obor/{{row['stprIdno']}}">
             <div class="card has-background-light">
                 <div class="card-content">
                     <div class="title is-5">
@@ -27,14 +28,13 @@
                         </div>
                     </div>
                 </div>
-                <footer class="card-footer">
                     <a href="/ws/obor/{{row['stprIdno']}}" hx-indicator="#progress" class="card-footer-item">
                         <span class="icon is-medium has-text-black">
                             <span class="mdi mdi-information mdi-24px"></span>
                           </span>
                     </a>
-                </footer>
             </div>
+        </a>
         </div>
         {% endfor %}
     </div>
