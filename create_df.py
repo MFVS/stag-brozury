@@ -37,5 +37,6 @@ def create_df():
     df.dropna(subset=["garant"], inplace=True)
 
     df.to_csv("df.csv", index=False)
-    
+
+
 create_df()

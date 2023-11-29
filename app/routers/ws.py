@@ -40,7 +40,9 @@ async def get_programs(
         df = df.loc[df["typ"] == study_programme.programme_type]
     if study_programme.programme:
         df = df[
-            df["nazev"].apply(unidecode).str.contains(study_programme.programme, case=False, na=False)
+            df["nazev"]
+            .apply(unidecode)
+            .str.contains(study_programme.programme, case=False, na=False)
         ]
 
     if df.empty:
@@ -58,11 +60,11 @@ async def get_programs(
         )
 
 
-@router.get("/obor/{obor_idno}")
-async def get_obor(request: Request, obor_idno: int):
+@router.get("/obor/{stpr_idno}")
+async def get_obor(request: Request, stpr_idno: int):
     url = "https://ws.ujep.cz/ws/services/rest2/programy/getOboryStudijnihoProgramu"
     vars = {
-        "stprIdno": obor_idno,
+        "stprIdno": stpr_idno,
         "lang": "cs",
         "outputFormat": "CSV",
         "outputFormatEncoding": "utf-8",
@@ -132,7 +134,17 @@ async def get_obor(request: Request, obor_idno: int):
     # print(df_skupiny.columns)
 
     df_predmety = df_skupiny[  # "nazev_segmentu",
-        ["nazev_bloku", "katedra", "zkratka", "nazev", "garanti", "kreditu", "vyukaZS", "vyukaLS", "doporucenyRocnik"]
+        [
+            "nazev_bloku",
+            "katedra",
+            "zkratka",
+            "nazev",
+            "garanti",
+            "kreditu",
+            "vyukaZS",
+            "vyukaLS",
+            "doporucenyRocnik",
+        ]
     ]
     # column semestr ZS if column if vyukaZS == A
     df_predmety["semestr"] = df_predmety["vyukaZS"].apply(
@@ -141,7 +153,16 @@ async def get_obor(request: Request, obor_idno: int):
     df_predmety["garanti"] = df_predmety["garanti"].str.replace("'", "")
     df_predmety = df_predmety.drop(columns=["vyukaZS", "vyukaLS"])
 
-    df_predmety.columns = ["Blok", "Katedra", "Zkratka", "Název", "Garanti", "Kreditů", "Rok", "Semestr"]
+    df_predmety.columns = [
+        "Blok",
+        "Katedra",
+        "Zkratka",
+        "Název",
+        "Garanti",
+        "Kreditů",
+        "Rok",
+        "Semestr",
+    ]
     df_predmety.fillna("—", inplace=True)
     df_predmety["Rok"] = df_predmety["Rok"].apply(lambda x: int(x) if x != "—" else x)
     df_predmety_str = df_predmety.to_json(orient="records")
@@ -175,6 +196,7 @@ def get_predmet(request: Request, predmet_zkr: str, katedra: str):
         "components/predmet_modal.html", {"request": request, "df": df}
     )
 
+
 @router.post("/filter")
 def filter_df(
     request: Request,
@@ -198,7 +220,7 @@ def filter_df(
         year=year,
         term=term,
     )
-    
+
     df_filter = pd.read_json(StringIO(df))
 
     if subject.block:
@@ -208,12 +230,16 @@ def filter_df(
     if subject.shortcut:
         # df_filter = df_filter.loc[df_filter["Zkratka"] == subject.shortcut]
         df_filter = df_filter[
-            df_filter["Zkratka"].apply(unidecode).str.contains(subject.shortcut, case=False, na=False)
+            df_filter["Zkratka"]
+            .apply(unidecode)
+            .str.contains(subject.shortcut, case=False, na=False)
         ]
     if subject.name:
         # df_filter = df_filter.loc[df_filter["Název"] == subject.name]
         df_filter = df_filter[
-            df_filter["Název"].apply(unidecode).str.contains(subject.name, case=False, na=False)
+            df_filter["Název"]
+            .apply(unidecode)
+            .str.contains(subject.name, case=False, na=False)
         ]
     if subject.guarantor:
         df_filter = df_filter.loc[df_filter["Garanti"] == subject.guarantor]

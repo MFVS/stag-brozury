@@ -26,6 +26,7 @@ async def a_get_df(url: str, vars: dict) -> pd.DataFrame:
 
     return df
 
+
 async def fetch_all_data(urls, vars):
     tasks = [a_get_df(url, vars) for url in urls]
     return await asyncio.gather(*tasks)

@@ -1,7 +1,11 @@
-  {% for index, row in df_predmety.iterrows() %}
+{% for index, row in df_predmety.iterrows() %}
   <tr _="on click fetch /ws/predmet/{{ row['Zkratka'] }}/{{ row['Katedra'] }} put the result after me">
     {% for column in df_predmety.columns %}
+    {% if column in ['Rok', 'Kreditů', 'Semestr'] %}
+    <td class="has-text-centered">{{ row[column] }}</td>
+    {% else %}
     <td>{{ row[column] }}</td>
+    {% endif %}
     {% endfor %}
   </tr>
-  {% endfor %}
+{% endfor %}

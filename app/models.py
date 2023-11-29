@@ -27,12 +27,12 @@ class StudyProgramme(BaseModel):
         }
 
         return vals_dict.get(v)
-    
+
     @field_validator("programme")
     def uni(cls, v):
         if v:
             return unidecode(v)
-    
+
 
 class Subject(BaseModel):
     block: str | None
@@ -45,14 +45,14 @@ class Subject(BaseModel):
     term: str | None
 
     normalize_all = field_validator("*", mode="before")(normalize_all)
-    
+
     @field_validator("credits", mode="before")
     def str_none(cls, v):
         try:
             return int(v)
         except:
             return None
-    
+
     @field_validator("shortcut", "name")
     def uni(cls, v):
         if v:
