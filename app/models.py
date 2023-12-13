@@ -18,15 +18,15 @@ class StudyProgramme(BaseModel):
 
     normalize_all = field_validator("*", mode="before")(normalize_all)
 
-    @field_validator("study_form")
-    def check_study_form(cls, v):
-        vals_dict = {
-            "Prezenční": "P",
-            "Kombinovaná": "K",
-            "Distanční": "D",
-        }
+    # @field_validator("study_form")
+    # def check_study_form(cls, v):
+    #     vals_dict = {
+    #         "Prezenční": "P",
+    #         "Kombinovaná": "K",
+    #         "Distanční": "D",
+    #     }
 
-        return vals_dict.get(v)
+    #     return vals_dict.get(v)
 
     @field_validator("programme")
     def uni(cls, v):
@@ -57,3 +57,8 @@ class Subject(BaseModel):
     def uni(cls, v):
         if v:
             return unidecode(v)
+        
+    @field_validator("year", mode="before")
+    def year(cls, v):
+        if v == "—":
+            return 100

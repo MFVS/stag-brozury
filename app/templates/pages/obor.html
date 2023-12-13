@@ -123,13 +123,26 @@
           </div>
         </th>
         <th>
-          <div class="select is-primary is-rounded">
+          <!-- <div class="select is-primary is-rounded">
             <select name="Garanti" hx-post="/ws/filter" hx-trigger="change" hx-target="#table" hx-swap="innerHTML">
               <option>Vše</option>
               {% for value in df_predmety["Garanti"].unique() %}
               <option>{{ value }}</option>
               {% endfor %}
             </select>
+          </div> -->
+          <div class="control has-icons-left">
+            <div class="select is-primary is-rounded">
+              <select name="Garanti" hx-post="/ws/filter" hx-trigger="change" hx-target="#table" hx-swap="innerHTML">
+                <option>Vše</option>
+                {% for value in df_predmety["Garanti"].unique() %}
+                <option>{{ value }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="icon is-medium is-left">
+              <i class="mdi mdi-account"></i>
+            </div>
           </div>
         </th>
         <th>
@@ -164,7 +177,7 @@
         </th>
       </tr>
     </thead>
-    <tbody id="table">
+    <tbody id="table" >
       {% for index, row in df_predmety.iterrows() %}
       <tr _="on click fetch /ws/predmet/{{ row['Zkratka'] }}/{{ row['Katedra'] }} put the result after me">
         {% for column in df_predmety.columns %}

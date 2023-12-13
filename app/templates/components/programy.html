@@ -11,7 +11,7 @@
                         <div class="subtitle is-6">
                             <div class="tags has-addons">
                                 {% if row['typ'] == "Bakalářský" %}
-                                <span class="tag is-success">{{ row['typ'] }}</span>
+                                <span class="tag is-info">{{ row['typ'] }}</span>
                                 {% elif row['typ'] == "Navazující" %}
                                 <span class="tag is-warning">{{ row['typ'] }}</span>
                                 {% elif row['typ'] == "Doktorský" %}
@@ -19,7 +19,7 @@
                                 {% endif %}
                                 
                                 {% if row['forma'] == "Prezenční" %}
-                                <span class="tag is-link">{{ row['forma'] }}</span>
+                                <span class="tag is-success">{{ row['forma'] }}</span>
                                 {% elif row['forma'] == "Kombinovaná" %}
                                 <span class="tag is-info is-light">{{ row['forma'] }}</span>
                                 {% elif row['forma'] == "Distanční" %}
@@ -28,7 +28,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="/ws/obor/{{row['stprIdno']}}" hx-indicator="#progress" class="card-footer-item">
+                    <a href="/ws/obor/{{row['key']}}" hx-indicator="#progress" class="card-footer-item">
                         <span class="icon is-medium has-text-black">
                             <span class="mdi mdi-information mdi-24px"></span>
                           </span>

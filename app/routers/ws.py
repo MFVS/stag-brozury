@@ -30,7 +30,22 @@ async def get_programs(
         programme=programme,
     )
 
-    df = pd.read_csv("df.csv")
+    url = "https://ws.ujep.cz/ws/services/rest2/ciselniky/getCiselnik"
+
+    vars = {
+        "domena": "PROGRAM",
+        "lang": "cs",
+        "outputFormat": "CSV",
+        "outputFormatEncoding": "utf-8",
+    }
+
+    response = requests.get(url, params=vars)
+    df = pd.read_csv(StringIO(response.text), sep=";")
+
+    df[["nazev", "parametry", "nanik"]] = df["nazev"].str.replace(")","").str.split(" \\(", expand=True)
+    df.drop(columns=["nanik"], inplace=True)
+    df[["fakulta", "kod", "typ", "forma", "jazyk"]] = df["parametry"].str.split(", ", expand=True)
+
 
     if study_programme.faculty:
         df = df.loc[df["fakulta"] == study_programme.faculty]
@@ -191,7 +206,9 @@ def get_predmet(request: Request, predmet_zkr: str, katedra: str):
     }
 
     df = pd.read_csv(StringIO(requests.get(url, params=vars).text), sep=";")
-
+    df.fillna("—", inplace=True)
+    print(df.columns)
+    print(df[["jednotekPrednasek","jednotkaPrednasky"]])
     return templates.TemplateResponse(
         "components/predmet_modal.html", {"request": request, "df": df}
     )
@@ -228,14 +245,12 @@ def filter_df(
     if subject.department:
         df_filter = df_filter.loc[df_filter["Katedra"] == subject.department]
     if subject.shortcut:
-        # df_filter = df_filter.loc[df_filter["Zkratka"] == subject.shortcut]
         df_filter = df_filter[
             df_filter["Zkratka"]
             .apply(unidecode)
             .str.contains(subject.shortcut, case=False, na=False)
         ]
     if subject.name:
-        # df_filter = df_filter.loc[df_filter["Název"] == subject.name]
         df_filter = df_filter[
             df_filter["Název"]
             .apply(unidecode)
@@ -246,6 +261,8 @@ def filter_df(
     if subject.credits:
         df_filter = df_filter.loc[df_filter["Kreditů"] == subject.credits]
     if subject.year:
+        if subject.year == 100:
+            subject.year = "—"
         df_filter = df_filter.loc[df_filter["Rok"] == subject.year]
     if subject.term:
         df_filter = df_filter.loc[df_filter["Semestr"] == subject.term]
