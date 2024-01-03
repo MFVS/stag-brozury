@@ -1,9 +1,10 @@
 from fastapi import FastAPI, Request, status
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import RedirectResponse, JSONResponse
+from fastapi.responses import RedirectResponse, JSONResponse, FileResponse
 from fastapi.exceptions import RequestValidationError
 import logging
+import os
 
 from .routers import ws
 from .utils import a_get_df
@@ -14,8 +15,8 @@ app = FastAPI(
     title="STAG API",
 )
 
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
+# app.mount("/static/*", StaticFiles(directory="app/static"), name="static")
 
 
 app = FastAPI()
@@ -40,5 +41,9 @@ async def home(request: Request):
 async def favicon():
     return RedirectResponse(url="/static/stag_favcon.ico")
 
+@app.get("/static/{image}")
+async def image(image: str):
+    
+    return FileResponse(f"app/static/{image}", media_type="image/svg+xml")
 
 app.include_router(ws.router)
