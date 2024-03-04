@@ -30,23 +30,25 @@ async def get_programs(
         programme=programme,
     )
 
-    url = "https://ws.ujep.cz/ws/services/rest2/ciselniky/getCiselnik"
+    # url = "https://ws.ujep.cz/ws/services/rest2/ciselniky/getCiselnik"
 
-    vars = {
-        "domena": "PROGRAM",
-        "lang": "cs",
-        "outputFormat": "CSV",
-        "outputFormatEncoding": "utf-8",
-    }
+    # vars = {
+    #     "domena": "PROGRAM",
+    #     "lang": "cs",
+    #     "outputFormat": "CSV",
+    #     "outputFormatEncoding": "utf-8",
+    # }
 
-    response = requests.get(url, params=vars)
-    df = pd.read_csv(StringIO(response.text), sep=";")
+    # response = requests.get(url, params=vars)
+    # df = pd.read_csv(StringIO(response.text), sep=";")
 
-    df[["nazev", "parametry", "nanik"]] = df["nazev"].str.replace(")","").str.split(" \\(", expand=True)
-    df.drop(columns=["nanik"], inplace=True)
-    df[["fakulta", "kod", "typ", "forma", "jazyk"]] = df["parametry"].str.split(", ", expand=True)
+    # df[["nazev", "parametry", "nanik"]] = df["nazev"].str.replace(")","").str.split(" \\(", expand=True)
+    # df.drop(columns=["nanik"], inplace=True)
+    # df[["fakulta", "kod", "typ", "forma", "jazyk"]] = df["parametry"].str.split(", ", expand=True)
 
-
+    # ciselnik OBOR
+    df = pd.read_csv("df.csv")
+    
     if study_programme.faculty:
         df = df.loc[df["fakulta"] == study_programme.faculty]
     if study_programme.study_form:
@@ -207,8 +209,8 @@ def get_predmet(request: Request, predmet_zkr: str, katedra: str):
 
     df = pd.read_csv(StringIO(requests.get(url, params=vars).text), sep=";")
     df.fillna("—", inplace=True)
-    print(df.columns)
-    print(df[["jednotekPrednasek","jednotkaPrednasky"]])
+    # print(df.columns)
+    # print(df[["jednotekPrednasek","jednotkaPrednasky"]])
     return templates.TemplateResponse(
         "components/predmet_modal.html", {"request": request, "df": df}
     )

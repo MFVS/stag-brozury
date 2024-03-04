@@ -34,8 +34,3 @@ getPredmetyByBlokFullInfo
 ## Odkazy
 
 <https://myjsmeujep.cz/program/matematika-ve-firmach-a-verejne-sprave/>
-
-
-## predmety
-
-pozadavky pro zapocet

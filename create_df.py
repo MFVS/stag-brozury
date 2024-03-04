@@ -31,10 +31,11 @@ def create_df():
         )
         for stprIdno in df["stprIdno"]
     ]
+
     df = pd.concat(tmp)
 
-    df.dropna(subset=["anotace"], inplace=True)
-    df.dropna(subset=["garant"], inplace=True)
+    df = df.sort_values(by=['platnyOd'], ascending=False)
+    df = df.drop_duplicates(subset=['nazevProgramu', "typ", "forma"])
 
     df.to_csv("df.csv", index=False)
 
